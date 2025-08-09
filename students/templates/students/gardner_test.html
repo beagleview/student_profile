@@ -1,0 +1,476 @@
+{% extends 'students/base.html' %}
+
+{% block title %}Gardner Multiple Intelligence Test - {{ student.full_name }}{% endblock %}
+
+{% block content %}
+<div class="flex justify-center">
+    <div class="w-full max-w-5xl">
+        <div class="bg-white rounded-lg shadow-lg">
+            <div class="bg-green-600 text-white rounded-t-lg px-6 py-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h4 class="text-xl font-semibold mb-2">
+                            <i class="fas fa-brain mr-2"></i>Gardner Multiple Intelligence Test
+                        </h4>
+                        <p class="text-green-100 mb-0">แบบทดสอบพหุปัญญาตามทฤษฎี Dr. Howard Gardner</p>
+                    </div>
+                    <div>
+                        <span class="bg-white text-gray-800 px-3 py-1 rounded-full text-sm font-medium">{{ student.full_name }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-body">
+                <!-- Student Info -->
+                <div class="row mb-4">
+                    <div class="col-md-3 text-center">
+                        {% if student.photo %}
+                            <img src="{{ student.photo.url }}" alt="{{ student.full_name }}" 
+                                 class="student-photo mb-2">
+                        {% else %}
+                            <div class="student-photo bg-light d-flex align-items-center justify-content-center mb-2">
+                                <i class="fas fa-user fa-2x text-muted"></i>
+                            </div>
+                        {% endif %}
+                        <h6 class="text-success">{{ student.full_name }}</h6>
+                        <small class="text-muted">ม.{{ student.level }}/{{ student.room }}</small>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="alert alert-success">
+                            <h6 class="alert-heading">
+                                <i class="fas fa-info-circle me-2"></i>คำแนะนำในการทำแบบทดสอบ
+                            </h6>
+                            <p class="mb-2">
+                                แบบทดสอบนี้จะประเมินความฉลาดของคุณใน 8 ประเภทตามทฤษฎี Multiple Intelligence:
+                            </p>
+                            <ul class="mb-2 small">
+                                <li><strong>Linguistic</strong> - ภาษาศาสตร์: ความสามารถใช้ภาษาและคำ</li>
+                                <li><strong>Logical-Mathematical</strong> - คณิตศาสตร์-ตรรกะ: ความสามารถทางตัวเลขและตรรกะ</li>
+                                <li><strong>Spatial</strong> - มิติสัมพันธ์: ความสามารถเข้าใจพื้นที่และภาพ</li>
+                                <li><strong>Musical</strong> - ดนตรี: ความสามารถทางดนตรีและเสียง</li>
+                                <li><strong>Bodily-Kinesthetic</strong> - กายเคลื่อนไหว: ความสามารถใช้ร่างกาย</li>
+                                <li><strong>Interpersonal</strong> - มนุษยสัมพันธ์: ความสามารถเข้าใจผู้อื่น</li>
+                                <li><strong>Intrapersonal</strong> - เข้าใจตนเอง: ความสามารถเข้าใจตนเอง</li>
+                                <li><strong>Naturalist</strong> - ธรรมชาติวิทยา: ความสามารถเข้าใจธรรมชาติ</li>
+                            </ul>
+                            <p class="mb-0 small text-muted">กรุณาให้คะแนนตามความสามารถจริงของคุณ (0-100 คะแนน)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test Form -->
+                <form method="post" id="gardnerTestForm">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <!-- Linguistic -->
+                            <div class="card mb-3" style="border-color: #ff6b6b;">
+                                <div class="card-header text-white" style="background-color: #ff6b6b;">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-comments me-2"></i>ภาษาศาสตร์ (Linguistic)
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        {{ form.linguistic_score.label_tag }}
+                                        {{ form.linguistic_score }}
+                                        <div class="form-text">การใช้ภาษา การเขียน การอ่าน การพูด</div>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar linguistic-progress" style="width: 0%; background-color: #ff6b6b;"></div>
+                                    </div>
+                                    <small class="text-muted linguistic-percent">0%</small>
+                                </div>
+                            </div>
+
+                            <!-- Logical -->
+                            <div class="card mb-3" style="border-color: #4ecdc4;">
+                                <div class="card-header text-white" style="background-color: #4ecdc4;">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-calculator me-2"></i>คณิตศาสตร์-ตรรกะ (Logical)
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        {{ form.logical_score.label_tag }}
+                                        {{ form.logical_score }}
+                                        <div class="form-text">การคิดเลข การแก้ปัญหา การวิเคราะห์</div>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar logical-progress" style="width: 0%; background-color: #4ecdc4;"></div>
+                                    </div>
+                                    <small class="text-muted logical-percent">0%</small>
+                                </div>
+                            </div>
+
+                            <!-- Spatial -->
+                            <div class="card mb-3" style="border-color: #45b7d1;">
+                                <div class="card-header text-white" style="background-color: #45b7d1;">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-cube me-2"></i>มิติสัมพันธ์ (Spatial)
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        {{ form.spatial_score.label_tag }}
+                                        {{ form.spatial_score }}
+                                        <div class="form-text">การเข้าใจรูปร่าง พื้นที่ การวาดภาพ</div>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar spatial-progress" style="width: 0%; background-color: #45b7d1;"></div>
+                                    </div>
+                                    <small class="text-muted spatial-percent">0%</small>
+                                </div>
+                            </div>
+
+                            <!-- Musical -->
+                            <div class="card mb-3" style="border-color: #96ceb4;">
+                                <div class="card-header text-white" style="background-color: #96ceb4;">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-music me-2"></i>ดนตรี (Musical)
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        {{ form.musical_score.label_tag }}
+                                        {{ form.musical_score }}
+                                        <div class="form-text">ความสามารถทางดนตรี จังหวะ เสียง</div>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar musical-progress" style="width: 0%; background-color: #96ceb4;"></div>
+                                    </div>
+                                    <small class="text-muted musical-percent">0%</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <!-- Bodily -->
+                            <div class="card mb-3" style="border-color: #feca57;">
+                                <div class="card-header text-dark" style="background-color: #feca57;">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-running me-2"></i>กายเคลื่อนไหว (Bodily)
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        {{ form.bodily_score.label_tag }}
+                                        {{ form.bodily_score }}
+                                        <div class="form-text">การใช้ร่างกาย กีฬา การเคลื่อนไหว</div>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bodily-progress" style="width: 0%; background-color: #feca57;"></div>
+                                    </div>
+                                    <small class="text-muted bodily-percent">0%</small>
+                                </div>
+                            </div>
+
+                            <!-- Interpersonal -->
+                            <div class="card mb-3" style="border-color: #ff9ff3;">
+                                <div class="card-header text-dark" style="background-color: #ff9ff3;">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-handshake me-2"></i>มนุษยสัมพันธ์ (Interpersonal)
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        {{ form.interpersonal_score.label_tag }}
+                                        {{ form.interpersonal_score }}
+                                        <div class="form-text">การเข้าใจผู้อื่น การสื่อสาร ความเป็นผู้นำ</div>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar interpersonal-progress" style="width: 0%; background-color: #ff9ff3;"></div>
+                                    </div>
+                                    <small class="text-muted interpersonal-percent">0%</small>
+                                </div>
+                            </div>
+
+                            <!-- Intrapersonal -->
+                            <div class="card mb-3" style="border-color: #54a0ff;">
+                                <div class="card-header text-white" style="background-color: #54a0ff;">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-user-check me-2"></i>เข้าใจตนเอง (Intrapersonal)
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        {{ form.intrapersonal_score.label_tag }}
+                                        {{ form.intrapersonal_score }}
+                                        <div class="form-text">การเข้าใจตนเอง การครองตน การไตร่ตรอง</div>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar intrapersonal-progress" style="width: 0%; background-color: #54a0ff;"></div>
+                                    </div>
+                                    <small class="text-muted intrapersonal-percent">0%</small>
+                                </div>
+                            </div>
+
+                            <!-- Naturalist -->
+                            <div class="card mb-3" style="border-color: #5f27cd;">
+                                <div class="card-header text-white" style="background-color: #5f27cd;">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-leaf me-2"></i>ธรรมชาติวิทยา (Naturalist)
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        {{ form.naturalist_score.label_tag }}
+                                        {{ form.naturalist_score }}
+                                        <div class="form-text">การเข้าใจธรรมชาติ สิ่งแวดล้อม การจัดหมวดหมู่</div>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar naturalist-progress" style="width: 0%; background-color: #5f27cd;"></div>
+                                    </div>
+                                    <small class="text-muted naturalist-percent">0%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gardner Profile Preview -->
+                    <div class="card border-success mb-4">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0 text-success">
+                                <i class="fas fa-chart-radar me-2"></i>Gardner Intelligence Profile
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-2">ระดับปัญญาของคุณ:</p>
+                                    <div id="topIntelligences">
+                                        <div class="mb-2">
+                                            <strong>1st:</strong> <span id="first-intelligence" class="text-success">-</span>
+                                        </div>
+                                        <div class="mb-2">
+                                            <strong>2nd:</strong> <span id="second-intelligence" class="text-info">-</span>
+                                        </div>
+                                        <div class="mb-2">
+                                            <strong>3rd:</strong> <span id="third-intelligence" class="text-warning">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <canvas id="previewChart" width="200" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Primary and Secondary Intelligence -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.primary_intelligence.label_tag }}
+                                {{ form.primary_intelligence }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.secondary_intelligence.label_tag }}
+                                {{ form.secondary_intelligence }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-success btn-lg me-3">
+                                <i class="fas fa-save me-2"></i>บันทึกผลการทดสอบ
+                            </button>
+                            <a href="{% url 'student_personality' student.pk %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>ยกเลิก
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .student-photo {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 2px solid #f8f9fa;
+    }
+    
+    .form-range {
+        cursor: pointer;
+    }
+    
+    .card-header h6 {
+        font-size: 0.95rem;
+        font-weight: 600;
+    }
+    
+    .progress {
+        margin-top: 8px;
+        margin-bottom: 4px;
+    }
+    
+    canvas {
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize preview chart
+    const previewCtx = document.getElementById('previewChart').getContext('2d');
+    const previewChart = new Chart(previewCtx, {
+        type: 'radar',
+        data: {
+            labels: ['ภาษา', 'คณิต', 'มิติ', 'ดนตรี', 'กาย', 'มนุษย์', 'ตนเอง', 'ธรรมชาติ'],
+            datasets: [{
+                label: 'Gardner Score',
+                data: [0, 0, 0, 0, 0, 0, 0, 0],
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2,
+                pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                r: {
+                    angleLines: {
+                        display: true
+                    },
+                    suggestedMin: 0,
+                    suggestedMax: 100,
+                    ticks: {
+                        stepSize: 25,
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+    // Score inputs
+    const scoreInputs = {
+        linguistic: document.getElementById('id_linguistic_score'),
+        logical: document.getElementById('id_logical_score'),
+        spatial: document.getElementById('id_spatial_score'),
+        musical: document.getElementById('id_musical_score'),
+        bodily: document.getElementById('id_bodily_score'),
+        interpersonal: document.getElementById('id_interpersonal_score'),
+        intrapersonal: document.getElementById('id_intrapersonal_score'),
+        naturalist: document.getElementById('id_naturalist_score')
+    };
+
+    // Progress bars and percentages
+    const progressBars = {
+        linguistic: document.querySelector('.linguistic-progress'),
+        logical: document.querySelector('.logical-progress'),
+        spatial: document.querySelector('.spatial-progress'),
+        musical: document.querySelector('.musical-progress'),
+        bodily: document.querySelector('.bodily-progress'),
+        interpersonal: document.querySelector('.interpersonal-progress'),
+        intrapersonal: document.querySelector('.intrapersonal-progress'),
+        naturalist: document.querySelector('.naturalist-progress')
+    };
+
+    const percentLabels = {
+        linguistic: document.querySelector('.linguistic-percent'),
+        logical: document.querySelector('.logical-percent'),
+        spatial: document.querySelector('.spatial-percent'),
+        musical: document.querySelector('.musical-percent'),
+        bodily: document.querySelector('.bodily-percent'),
+        interpersonal: document.querySelector('.interpersonal-percent'),
+        intrapersonal: document.querySelector('.intrapersonal-percent'),
+        naturalist: document.querySelector('.naturalist-percent')
+    };
+
+    // Intelligence names mapping
+    const intelligenceNames = {
+        linguistic: 'ภาษาศาสตร์',
+        logical: 'คณิตศาสตร์-ตรรกะ',
+        spatial: 'มิติสัมพันธ์',
+        musical: 'ดนตรี',
+        bodily: 'กายเคลื่อนไหว',
+        interpersonal: 'มนุษยสัมพันธ์',
+        intrapersonal: 'เข้าใจตนเอง',
+        naturalist: 'ธรรมชาติวิทยา'
+    };
+
+    // Update progress bars and chart
+    function updateProgress() {
+        const scores = {};
+        
+        // Update individual progress bars
+        Object.keys(scoreInputs).forEach(key => {
+            const value = parseInt(scoreInputs[key].value) || 0;
+            scores[key] = value;
+            
+            progressBars[key].style.width = value + '%';
+            percentLabels[key].textContent = value + '%';
+        });
+
+        // Update chart
+        previewChart.data.datasets[0].data = [
+            scores.linguistic,
+            scores.logical,
+            scores.spatial,
+            scores.musical,
+            scores.bodily,
+            scores.interpersonal,
+            scores.intrapersonal,
+            scores.naturalist
+        ];
+        previewChart.update();
+
+        // Calculate top 3 intelligences
+        const sortedScores = Object.entries(scores)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 3);
+
+        // Update top intelligences display
+        document.getElementById('first-intelligence').textContent = 
+            sortedScores[0] ? `${intelligenceNames[sortedScores[0][0]]} (${sortedScores[0][1]}%)` : '-';
+        document.getElementById('second-intelligence').textContent = 
+            sortedScores[1] ? `${intelligenceNames[sortedScores[1][0]]} (${sortedScores[1][1]}%)` : '-';
+        document.getElementById('third-intelligence').textContent = 
+            sortedScores[2] ? `${intelligenceNames[sortedScores[2][0]]} (${sortedScores[2][1]}%)` : '-';
+
+        // Update primary and secondary dropdowns
+        const primarySelect = document.getElementById('id_primary_intelligence');
+        const secondarySelect = document.getElementById('id_secondary_intelligence');
+        
+        if (sortedScores.length > 0) {
+            primarySelect.value = sortedScores[0][0].toUpperCase();
+        }
+        if (sortedScores.length > 1) {
+            secondarySelect.value = sortedScores[1][0].toUpperCase();
+        }
+    }
+
+    // Add event listeners to all score inputs
+    Object.values(scoreInputs).forEach(input => {
+        input.addEventListener('input', updateProgress);
+        input.addEventListener('change', updateProgress);
+    });
+
+    // Initial update
+    updateProgress();
+});
+</script>
+{% endblock %}

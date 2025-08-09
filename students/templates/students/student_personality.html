@@ -1,0 +1,511 @@
+{% extends 'students/base.html' %}
+
+{% block title %}{{ student.full_name }} - Personality Tests{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <!-- Left Column - Student Info -->
+    <div class="lg:col-span-1">
+        <div class="bg-white rounded-lg shadow-lg mb-6">
+            <div class="p-6 text-center">
+                {% if student.photo %}
+                    <img src="{{ student.photo.url }}" alt="{{ student.full_name }}" 
+                         class="w-32 h-32 rounded-full object-cover mx-auto mb-4 border-4 border-gray-100 shadow-md">
+                {% else %}
+                    <div class="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4 border-4 border-gray-100 shadow-md">
+                        <i class="fas fa-user text-4xl text-gray-400"></i>
+                    </div>
+                {% endif %}
+                
+                <h4 class="text-xl font-bold text-primary-600 mb-2">{{ student.full_name }}</h4>
+                <p class="text-gray-600 mb-1">นักเรียนชั้น ม.{{ student.level }}/{{ student.level }}</p>
+                <p class="text-gray-600 mb-4">{{ student.age }} ปี</p>
+                
+                <!-- Personal Info -->
+                <div class="border-t border-gray-200 pt-4 mt-4 space-y-2">
+                    <p class="text-sm"><span class="font-semibold">Student ID:</span> {{ student.student_id }}</p>
+                    <p class="text-sm"><span class="font-semibold">Student Number:</span> {{ student.student_number }}</p>
+                    <p class="text-sm"><span class="font-semibold">Room:</span> {{ student.room }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Actions -->
+        <div class="bg-white rounded-lg shadow-lg">
+            <div class="bg-primary-600 text-white rounded-t-lg px-4 py-3">
+                <h5 class="text-lg font-semibold mb-0">
+                    <i class="fas fa-clipboard-list mr-2"></i>เอกสารการเรียน
+                </h5>
+            </div>
+            <div class="p-4">
+                <div class="space-y-3">
+                    <a href="{% url 'holland_questionnaire' student.pk %}" class="w-full bg-white border border-primary-300 text-primary-600 hover:bg-primary-50 px-4 py-2 rounded-lg font-medium transition-colors inline-flex items-center justify-center">
+                        <i class="fas fa-user-tie mr-2"></i>เริ่มทำแบบทดสอบ Holland
+                    </a>
+                    <a href="{% url 'gardner_questionnaire' student.pk %}" class="w-full bg-white border border-green-300 text-green-600 hover:bg-green-50 px-4 py-2 rounded-lg font-medium transition-colors inline-flex items-center justify-center">
+                        <i class="fas fa-brain mr-2"></i>เริ่มทำแบบทดสอบ Gardner
+                    </a>
+                    <a href="{% url 'student_detail' student.pk %}" class="w-full bg-white border border-gray-300 text-gray-600 hover:bg-gray-50 px-4 py-2 rounded-lg font-medium transition-colors inline-flex items-center justify-center">
+                        <i class="fas fa-arrow-left mr-2"></i>กลับไปหน้ารายละเอียด
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column - Test Results -->
+    <div class="lg:col-span-3">
+        <!-- Holland Test Results -->
+        {% if holland_test %}
+            <div class="bg-white rounded-lg shadow-lg mb-6">
+                <div class="bg-blue-600 text-white rounded-t-lg px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <h5 class="text-lg font-semibold mb-1">
+                            <i class="fas fa-briefcase mr-2"></i>B1 ดำเนินความพฤติกรรมด้วคาที่จึงการ Dr. John L Holland
+                        </h5>
+                        <small class="text-blue-100">Career Interest Assessment</small>
+                    </div>
+                    <div>
+                        <a href="{% url 'holland_test' student.pk %}" class="bg-white text-blue-600 hover:bg-blue-50 px-3 py-1 rounded text-sm font-medium transition-colors inline-flex items-center">
+                            <i class="fas fa-edit mr-1"></i> แก้ไข
+                        </a>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <!-- Holland Radar Chart -->
+                    <div class="text-center mb-6">
+                        <canvas id="hollandChart" width="300" height="300"></canvas>
+                    </div>
+                    
+                    <!-- Holland Results Summary -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h6 class="text-primary-600 font-semibold mb-4">Holland Code: {{ holland_test.holland_code }}</h6>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <small class="text-sm font-medium text-gray-700">นักสำรวจ (Realistic)</small>
+                                        <small class="text-sm font-semibold text-gray-900">{{ holland_test.realistic_score }}%</small>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-red-500 h-2 rounded-full" style="width: {{ holland_test.realistic_score }}%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <small class="text-sm font-medium text-gray-700">นักวิจัย (Investigative)</small>
+                                        <small class="text-sm font-semibold text-gray-900">{{ holland_test.investigative_score }}%</small>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-yellow-500 h-2 rounded-full" style="width: {{ holland_test.investigative_score }}%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <small class="text-sm font-medium text-gray-700">นักสร้างสรรค์ (Artistic)</small>
+                                        <small class="text-sm font-semibold text-gray-900">{{ holland_test.artistic_score }}%</small>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-green-500 h-2 rounded-full" style="width: {{ holland_test.artistic_score }}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <small class="text-sm font-medium text-gray-700">นักสังคม (Social)</small>
+                                        <small class="text-sm font-semibold text-gray-900">{{ holland_test.social_score }}%</small>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-500 h-2 rounded-full" style="width: {{ holland_test.social_score }}%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <small class="text-sm font-medium text-gray-700">นักผจญภัย (Enterprising)</small>
+                                        <small class="text-sm font-semibold text-gray-900">{{ holland_test.enterprising_score }}%</small>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-primary-600 h-2 rounded-full" style="width: {{ holland_test.enterprising_score }}%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <small class="text-sm font-medium text-gray-700">นักระบบ (Conventional)</small>
+                                        <small class="text-sm font-semibold text-gray-900">{{ holland_test.conventional_score }}%</small>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-gray-600 h-2 rounded-full" style="width: {{ holland_test.conventional_score }}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="bg-white rounded-lg shadow-lg mb-6">
+                <div class="bg-gray-100 rounded-t-lg px-6 py-4">
+                    <h5 class="text-lg font-semibold text-gray-600 mb-0">
+                        <i class="fas fa-briefcase mr-2"></i>B1 ดำเนินความพฤติกรรมด้วคาที่จึงการ Dr. John L Holland
+                    </h5>
+                </div>
+                <div class="p-8 text-center">
+                    <i class="fas fa-clipboard-question text-6xl text-gray-400 mb-4"></i>
+                    <h5 class="text-xl font-semibold text-gray-600 mb-2">ยังไม่ได้ทำแบบทดสอบ</h5>
+                    <p class="text-gray-500 mb-6">เริ่มทำแบบทดสอบบุคลิกภาพอาชีพตามทฤษฎี Dr. Holland</p>
+                    <a href="{% url 'holland_questionnaire' student.pk %}" class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-colors inline-flex items-center">
+                        <i class="fas fa-play mr-2"></i>เริ่มทำแบบทดสอบ
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Gardner Test Results -->
+        {% if gardner_test %}
+            <div class="bg-white rounded-lg shadow-lg">
+                <div class="bg-green-600 text-white rounded-t-lg px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <h5 class="text-lg font-semibold mb-1">
+                            <i class="fas fa-brain mr-2"></i>B2 ดำเนินความพฤติกรรมพหุปัญญา Dr. Howard Gardner
+                        </h5>
+                        <small class="text-green-100">Multiple Intelligence Assessment</small>
+                    </div>
+                    <div>
+                        <a href="{% url 'gardner_test' student.pk %}" class="bg-white text-green-600 hover:bg-green-50 px-3 py-1 rounded text-sm font-medium transition-colors inline-flex items-center">
+                            <i class="fas fa-edit mr-1"></i> แก้ไข
+                        </a>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <!-- Gardner Radar Chart -->
+                    <div class="text-center mb-6">
+                        <canvas id="gardnerChart" width="300" height="300"></canvas>
+                    </div>
+                    
+                    <!-- Gardner Results Summary -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <small class="text-sm font-medium text-gray-700">ภาษาศาสตร์</small>
+                                    <small class="text-sm font-semibold text-gray-900">{{ gardner_test.linguistic_score }}%</small>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="h-2 rounded-full" style="width: {{ gardner_test.linguistic_score }}%; background-color: #ff6b6b;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <small class="text-sm font-medium text-gray-700">คณิตศาสตร์-ตรรกะ</small>
+                                    <small class="text-sm font-semibold text-gray-900">{{ gardner_test.logical_score }}%</small>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="h-2 rounded-full" style="width: {{ gardner_test.logical_score }}%; background-color: #4ecdc4;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <small class="text-sm font-medium text-gray-700">มิติสัมพันธ์</small>
+                                    <small class="text-sm font-semibold text-gray-900">{{ gardner_test.spatial_score }}%</small>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="h-2 rounded-full" style="width: {{ gardner_test.spatial_score }}%; background-color: #45b7d1;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <small class="text-sm font-medium text-gray-700">ดนตรี</small>
+                                    <small class="text-sm font-semibold text-gray-900">{{ gardner_test.musical_score }}%</small>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="h-2 rounded-full" style="width: {{ gardner_test.musical_score }}%; background-color: #96ceb4;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <small class="text-sm font-medium text-gray-700">กายเคลื่อนไหว</small>
+                                    <small class="text-sm font-semibold text-gray-900">{{ gardner_test.bodily_score }}%</small>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="h-2 rounded-full" style="width: {{ gardner_test.bodily_score }}%; background-color: #feca57;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <small class="text-sm font-medium text-gray-700">มนุษยสัมพันธ์</small>
+                                    <small class="text-sm font-semibold text-gray-900">{{ gardner_test.interpersonal_score }}%</small>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="h-2 rounded-full" style="width: {{ gardner_test.interpersonal_score }}%; background-color: #ff9ff3;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <small class="text-sm font-medium text-gray-700">เข้าใจตนเอง</small>
+                                    <small class="text-sm font-semibold text-gray-900">{{ gardner_test.intrapersonal_score }}%</small>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="h-2 rounded-full" style="width: {{ gardner_test.intrapersonal_score }}%; background-color: #54a0ff;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center mb-1">
+                                    <small class="text-sm font-medium text-gray-700">ธรรมชาติวิทยา</small>
+                                    <small class="text-sm font-semibold text-gray-900">{{ gardner_test.naturalist_score }}%</small>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="h-2 rounded-full" style="width: {{ gardner_test.naturalist_score }}%; background-color: #5f27cd;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="bg-white rounded-lg shadow-lg">
+                <div class="bg-gray-100 rounded-t-lg px-6 py-4">
+                    <h5 class="text-lg font-semibold text-gray-600 mb-0">
+                        <i class="fas fa-brain mr-2"></i>B2 ดำเนินความพฤติกรรมพหุปัญญา Dr. Howard Gardner
+                    </h5>
+                </div>
+                <div class="p-8 text-center">
+                    <i class="fas fa-brain text-6xl text-gray-400 mb-4"></i>
+                    <h5 class="text-xl font-semibold text-gray-600 mb-2">ยังไม่ได้ทำแบบทดสอบ</h5>
+                    <p class="text-gray-500 mb-6">เริ่มทำแบบทดสอบพหุปัญญาตามทฤษฎี Dr. Howard Gardner</p>
+                    <a href="{% url 'gardner_questionnaire' student.pk %}" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors inline-flex items-center">
+                        <i class="fas fa-play mr-2"></i>เริ่มทำแบบทดสอบ
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Results Summary -->
+{% if holland_test and gardner_test %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-bar me-2"></i>สรุปผลการประเมิน
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-primary">ลำดับ 1</h6>
+                        <div class="alert alert-primary">
+                            <h6>ซองนข้าผตระเนียนเบนดผนผลแสอยรูดักงับค๊ม</h6>
+                            <div class="progress mb-2">
+                                <div class="progress-bar bg-primary" style="width: 66.67%">66.67%</div>
+                            </div>
+                            <small class="text-muted">ตามแนวทฤษฎี Dr. Holland และ Dr. Gardner</small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-success">ลำดับ 2</h6>
+                        <div class="alert alert-success">
+                            <h6>ซองนข้าไสคม มปัญญู่พ์รักษันกับบุคลภม</h6>
+                            <div class="progress mb-2">
+                                <div class="progress-bar bg-success" style="width: 61.11%">61.11%</div>
+                            </div>
+                            <small class="text-muted">ความสามารถทางด้านการสื่อสารและเข้าใจผู้อื่น</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Insights -->
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h6>การแนะแนวเพิ่มเติม:</h6>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card border-primary">
+                                    <div class="card-body text-center">
+                                        <h6 class="text-primary">สำดับ 3</h6>
+                                        <p class="small">ซองดิกมธ์วูำร่วมดิงแล่กเปีปม</p>
+                                        <div class="badge bg-secondary">47.06%</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card border-info">
+                                    <div class="card-body text-center">
+                                        <h6 class="text-info">สำดับ 4</h6>
+                                        <p class="small">ซองคามรวงรี่สำพแทเมิ่นปูปธรรม</p>
+                                        <div class="badge bg-secondary">41.67%</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card border-warning">
+                                    <div class="card-body text-center">
+                                        <h6 class="text-warning">สำดับ 5</h6>
+                                        <p class="small">ซองดตีปะควรทสุขกะคะมา</p>
+                                        <div class="badge bg-secondary">35.71%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Back to Student Details -->
+<div class="mt-6">
+    <div class="text-center">
+        <a href="{% url 'student_detail' student.pk %}" class="bg-white border border-gray-300 text-gray-600 hover:bg-gray-50 px-6 py-2 rounded-lg font-medium transition-colors inline-flex items-center mr-3">
+            <i class="fas fa-arrow-left mr-2"></i>กลับไปหน้ารายละเอียดนักเรียน
+        </a>
+        <a href="{% url 'student_list' %}" class="bg-white border border-primary-300 text-primary-600 hover:bg-primary-50 px-6 py-2 rounded-lg font-medium transition-colors inline-flex items-center">
+            <i class="fas fa-users mr-2"></i>ดูรายชื่อนักเรียนทั้งหมด
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .student-photo-large {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin: 0 auto;
+        border: 3px solid #f8f9fa;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .progress-group {
+        margin-bottom: 15px;
+    }
+    
+    .progress {
+        height: 8px;
+        border-radius: 4px;
+    }
+    
+    .card-header h5 {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+    
+    .alert {
+        border-radius: 8px;
+    }
+    
+    canvas {
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+{% if holland_test %}
+// Holland Radar Chart
+const hollandCtx = document.getElementById('hollandChart').getContext('2d');
+new Chart(hollandCtx, {
+    type: 'radar',
+    data: {
+        labels: ['นักสำรวจ', 'นักวิจัย', 'นักสร้างสรรค์', 'นักสังคม', 'นักผจญภัย', 'นักระบบ'],
+        datasets: [{
+            label: 'Holland Score',
+            data: [
+                {{ holland_test.realistic_score }},
+                {{ holland_test.investigative_score }},
+                {{ holland_test.artistic_score }},
+                {{ holland_test.social_score }},
+                {{ holland_test.enterprising_score }},
+                {{ holland_test.conventional_score }}
+            ],
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 2,
+            pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            r: {
+                angleLines: {
+                    display: true
+                },
+                suggestedMin: 0,
+                suggestedMax: 100,
+                ticks: {
+                    stepSize: 25
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+});
+{% endif %}
+
+{% if gardner_test %}
+// Gardner Radar Chart
+const gardnerCtx = document.getElementById('gardnerChart').getContext('2d');
+new Chart(gardnerCtx, {
+    type: 'radar',
+    data: {
+        labels: ['ภาษา', 'คณิตศาสตร์', 'มิติสัมพันธ์', 'ดนตรี', 'กายเคลื่อนไหว', 'มนุษยสัมพันธ์', 'เข้าใจตนเอง', 'ธรรมชาติ'],
+        datasets: [{
+            label: 'Gardner Score',
+            data: [
+                {{ gardner_test.linguistic_score }},
+                {{ gardner_test.logical_score }},
+                {{ gardner_test.spatial_score }},
+                {{ gardner_test.musical_score }},
+                {{ gardner_test.bodily_score }},
+                {{ gardner_test.interpersonal_score }},
+                {{ gardner_test.intrapersonal_score }},
+                {{ gardner_test.naturalist_score }}
+            ],
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 2,
+            pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            r: {
+                angleLines: {
+                    display: true
+                },
+                suggestedMin: 0,
+                suggestedMax: 100,
+                ticks: {
+                    stepSize: 25
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+});
+{% endif %}
+</script>
+{% endblock %}

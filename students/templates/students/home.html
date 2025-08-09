@@ -1,0 +1,173 @@
+{% extends 'students/base.html' %}
+
+{% block title %}Home - Student Management System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="text-center mb-12">
+    <h1 class="text-4xl md:text-5xl font-bold text-primary-600 mb-4">
+        <i class="fas fa-graduation-cap mr-4"></i>
+        Student Management System
+    </h1>
+    <p class="text-xl text-gray-600 max-w-2xl mx-auto">Manage student enrollment, records, and information with ease</p>
+</div>
+
+<!-- Statistics Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+    <div class="bg-white rounded-lg shadow-lg p-6 stats-card text-center">
+        <div class="text-white">
+            <i class="fas fa-users text-4xl mb-4"></i>
+            <h3 class="text-3xl font-bold mb-2">{{ total_students }}</h3>
+            <p class="text-lg">Total Students</p>
+        </div>
+    </div>
+    
+    <div class="bg-green-500 text-white rounded-lg shadow-lg p-6 text-center hover:bg-green-600 transition-colors">
+        <i class="fas fa-chart-line text-4xl mb-4"></i>
+        <h3 class="text-3xl font-bold mb-2">{{ level_stats|length }}</h3>
+        <p class="text-lg">Academic Levels</p>
+    </div>
+    
+    <div class="bg-yellow-500 text-white rounded-lg shadow-lg p-6 text-center hover:bg-yellow-600 transition-colors">
+        <i class="fas fa-door-open text-4xl mb-4"></i>
+        <h3 class="text-3xl font-bold mb-2">{{ room_stats|length }}</h3>
+        <p class="text-lg">Classrooms</p>
+    </div>
+    
+    <div class="bg-blue-500 text-white rounded-lg shadow-lg p-6 text-center hover:bg-blue-600 transition-colors">
+        <i class="fas fa-user-plus text-4xl mb-4"></i>
+        <h3 class="text-3xl font-bold mb-2">{{ recent_students|length }}</h3>
+        <p class="text-lg">Recent Enrollments</p>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="mb-12">
+    <h3 class="text-2xl font-bold text-gray-800 mb-6">Quick Actions</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-xl transition-shadow">
+            <i class="fas fa-user-plus text-4xl text-primary-600 mb-4"></i>
+            <h5 class="text-xl font-semibold mb-3">Enroll New Student</h5>
+            <p class="text-gray-600 mb-4">Add a new student to the system</p>
+            <a href="{% url 'student_enroll' %}" class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg font-medium transition-colors inline-flex items-center">
+                <i class="fas fa-plus mr-2"></i>Enroll Student
+            </a>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-xl transition-shadow">
+            <i class="fas fa-users text-4xl text-green-600 mb-4"></i>
+            <h5 class="text-xl font-semibold mb-3">View All Students</h5>
+            <p class="text-gray-600 mb-4">Browse and search student records</p>
+            <a href="{% url 'student_list' %}" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors inline-flex items-center">
+                <i class="fas fa-list mr-2"></i>View Students
+            </a>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-xl transition-shadow">
+            <i class="fas fa-chalkboard-teacher text-4xl text-blue-600 mb-4"></i>
+            <h5 class="text-xl font-semibold mb-3">Teacher Admin</h5>
+            <p class="text-gray-600 mb-4">Table-style student management</p>
+            <a href="{% url 'teacher_admin' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors inline-flex items-center">
+                <i class="fas fa-table mr-2"></i>Teacher Admin
+            </a>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-xl transition-shadow">
+            <i class="fas fa-cog text-4xl text-yellow-600 mb-4"></i>
+            <h5 class="text-xl font-semibold mb-3">Django Admin</h5>
+            <p class="text-gray-600 mb-4">Advanced system features</p>
+            <a href="{% url 'admin:index' %}" class="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-lg font-medium transition-colors inline-flex items-center">
+                <i class="fas fa-tools mr-2"></i>Django Admin
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Details -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+    <!-- Level Statistics -->
+    <div class="bg-white rounded-lg shadow-lg">
+        <div class="bg-primary-600 text-white px-6 py-4 rounded-t-lg">
+            <h5 class="text-xl font-semibold">
+                <i class="fas fa-graduation-cap mr-2"></i>Students by Level
+            </h5>
+        </div>
+        <div class="p-6">
+            {% for level, count in level_stats.items %}
+                <div class="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0">
+                    <span class="text-gray-700">{{ level }}</span>
+                    <span class="bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ count }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Room Statistics -->
+    <div class="bg-white rounded-lg shadow-lg">
+        <div class="bg-green-500 text-white px-6 py-4 rounded-t-lg">
+            <h5 class="text-xl font-semibold">
+                <i class="fas fa-door-open mr-2"></i>Students by Room
+            </h5>
+        </div>
+        <div class="p-6">
+            {% for room, count in room_stats.items %}
+                <div class="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0">
+                    <span class="text-gray-700">{{ room }}</span>
+                    <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">{{ count }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Gender Statistics -->
+    <div class="bg-white rounded-lg shadow-lg">
+        <div class="bg-blue-500 text-white px-6 py-4 rounded-t-lg">
+            <h5 class="text-xl font-semibold">
+                <i class="fas fa-venus-mars mr-2"></i>Students by Gender
+            </h5>
+        </div>
+        <div class="p-6">
+            {% for gender, count in gender_stats.items %}
+                {% if count > 0 %}
+                    <div class="flex justify-between items-center py-2 border-b border-gray-200 last:border-b-0">
+                        <span class="text-gray-700">{{ gender }}</span>
+                        <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium">{{ count }}</span>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Recent Enrollments -->
+{% if recent_students %}
+<div class="bg-white rounded-lg shadow-lg">
+    <div class="bg-yellow-500 text-white px-6 py-4 rounded-t-lg">
+        <h5 class="text-xl font-semibold">
+            <i class="fas fa-clock mr-2"></i>Recent Enrollments
+        </h5>
+    </div>
+    <div class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for student in recent_students %}
+                <div class="bg-gray-50 rounded-lg p-4 student-card text-center hover:shadow-md transition-shadow">
+                    {% if student.photo %}
+                        <img src="{{ student.photo.url }}" alt="Student photo" class="student-photo mx-auto mb-3">
+                    {% else %}
+                        <div class="student-photo mx-auto mb-3 bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-user text-2xl text-gray-500"></i>
+                        </div>
+                    {% endif %}
+                    <h6 class="font-semibold text-gray-800 mb-1">{{ student.full_name }}</h6>
+                    <p class="text-sm text-gray-600 mb-1">{{ student.student_id }}</p>
+                    <p class="text-sm text-gray-600 mb-3">Level {{ student.level }} - Room {{ student.room }}</p>
+                    <a href="{% url 'student_detail' student.pk %}" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded text-sm font-medium transition-colors">
+                        View Details
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

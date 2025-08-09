@@ -1,0 +1,358 @@
+{% extends 'students/base.html' %}
+
+{% block title %}Teacher Admin - Student Management System{% endblock %}
+
+{% block content %}
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+    <div>
+        <h2 class="text-2xl font-bold text-gray-900">
+            <i class="fas fa-chalkboard-teacher mr-2"></i>Teacher Admin Panel
+            <small class="text-gray-500 text-lg font-normal">({{ total_students }} students)</small>
+        </h2>
+    </div>
+    <div class="flex gap-3">
+        <a href="{% url 'student_enroll' %}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors inline-flex items-center">
+            <i class="fas fa-user-plus mr-2"></i>Add Student
+        </a>
+        <a href="{% url 'admin:index' %}" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition-colors inline-flex items-center" target="_blank">
+            <i class="fas fa-cog mr-2"></i>Django Admin
+        </a>
+    </div>
+</div>
+
+<!-- Search and Filter Form -->
+<div class="bg-white rounded-lg shadow mb-6">
+    <div class="p-6">
+        <form method="get" class="grid grid-cols-1 md:grid-cols-6 gap-4">
+            <div class="md:col-span-2">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </div>
+                    {{ search_form.search_query }}
+                </div>
+            </div>
+            <div>
+                {{ search_form.level }}
+            </div>
+            <div>
+                {{ search_form.room }}
+            </div>
+            <div>
+                {{ search_form.sex }}
+            </div>
+            <div>
+                <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition-colors inline-flex items-center justify-center">
+                    <i class="fas fa-search mr-1"></i>Search
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Students Table -->
+<div class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-800">
+                <tr>
+                    <th class="w-12 px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                        <input type="checkbox" id="selectAll" class="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500">
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                        รหัสนักเรียน<br><small class="text-gray-300">Student ID</small>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                        เลขที่<br><small class="text-gray-300">No.</small>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                        ชื่อ<br><small class="text-gray-300">Name</small>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                        ห้องเรียน<br><small class="text-gray-300">Class</small>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                        ชั้น<br><small class="text-gray-300">Level</small>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                        ห้อง<br><small class="text-gray-300">Room</small>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                        สถานะ<br><small class="text-gray-300">Status</small>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Roles</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Action</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% if page_obj %}
+                    {% for student in page_obj %}
+                        <tr class="hover:bg-blue-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <input type="checkbox" class="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 student-checkbox" 
+                                       value="{{ student.pk }}">
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="text-sm font-medium text-primary-600">{{ student.student_number|default:student.pk }}</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">{{ forloop.counter }}</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    {% if student.photo %}
+                                        <img src="{{ student.photo.url }}" alt="{{ student.full_name }}" 
+                                             class="w-8 h-8 rounded-full object-cover mr-3">
+                                    {% else %}
+                                        <div class="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center mr-3">
+                                            <i class="fas fa-user text-white text-xs"></i>
+                                        </div>
+                                    {% endif %}
+                                    <div>
+                                        <div class="text-sm font-medium text-gray-900">{{ student.full_name }}</div>
+                                        <div class="text-sm text-gray-500">{{ student.student_id }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">ม.{{ student.level }}/{{ student.level }}</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">ม.{{ student.level }}</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">{{ student.room|stringformat:"02d" }}</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" id="status{{ student.pk }}" checked>
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                                    <span class="ml-3 text-sm font-medium text-green-600">Active</span>
+                                </label>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-800 text-white">Student</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <div class="flex flex-wrap gap-1">
+                                    <a href="{% url 'student_detail' student.pk %}" 
+                                       class="bg-primary-600 hover:bg-primary-700 text-white px-2 py-1 rounded text-xs transition-colors" title="View Details">
+                                        View
+                                    </a>
+                                    <a href="{% url 'student_edit' student.pk %}" 
+                                       class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs transition-colors" title="Edit Student">
+                                        Edit
+                                    </a>
+                                    <button type="button" class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs transition-colors" 
+                                            onclick="resetPassword({{ student.pk }})" title="Reset Password">
+                                        Reset
+                                    </button>
+                                    <button type="button" class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs transition-colors" 
+                                            onclick="deleteStudent({{ student.pk }}, '{{ student.full_name|escapejs }}')" title="Delete Student">
+                                        Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="10" class="px-6 py-20 text-center">
+                            <i class="fas fa-users text-5xl text-gray-400 mb-4"></i>
+                            <h5 class="text-xl font-medium text-gray-500 mb-2">No students found</h5>
+                            <p class="text-gray-500 mb-4">Try adjusting your search criteria or add a new student.</p>
+                            <a href="{% url 'student_enroll' %}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors inline-flex items-center">
+                                <i class="fas fa-user-plus mr-2"></i>Add First Student
+                            </a>
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+    <nav aria-label="Student pagination" class="mt-6">
+        <div class="flex items-center justify-center">
+            <div class="flex items-center space-x-1">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1{% if request.GET.search_query %}&search_query={{ request.GET.search_query }}{% endif %}{% if request.GET.level %}&level={{ request.GET.level }}{% endif %}{% if request.GET.room %}&room={{ request.GET.room }}{% endif %}{% if request.GET.sex %}&sex={{ request.GET.sex }}{% endif %}"
+                       class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 hover:text-gray-700">
+                        First
+                    </a>
+                    <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search_query %}&search_query={{ request.GET.search_query }}{% endif %}{% if request.GET.level %}&level={{ request.GET.level }}{% endif %}{% if request.GET.room %}&room={{ request.GET.room }}{% endif %}{% if request.GET.sex %}&sex={{ request.GET.sex }}{% endif %}"
+                       class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border-t border-b border-gray-300 hover:bg-gray-50 hover:text-gray-700">
+                        Previous
+                    </a>
+                {% endif %}
+                
+                <span class="px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-primary-600">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+                
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if request.GET.search_query %}&search_query={{ request.GET.search_query }}{% endif %}{% if request.GET.level %}&level={{ request.GET.level }}{% endif %}{% if request.GET.room %}&room={{ request.GET.room }}{% endif %}{% if request.GET.sex %}&sex={{ request.GET.sex }}{% endif %}"
+                       class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border-t border-b border-gray-300 hover:bg-gray-50 hover:text-gray-700">
+                        Next
+                    </a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search_query %}&search_query={{ request.GET.search_query }}{% endif %}{% if request.GET.level %}&level={{ request.GET.level }}{% endif %}{% if request.GET.room %}&room={{ request.GET.room }}{% endif %}{% if request.GET.sex %}&sex={{ request.GET.sex }}{% endif %}"
+                       class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 hover:text-gray-700">
+                        Last
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+{% endif %}
+
+<!-- Bulk Actions (Hidden by default) -->
+<div id="bulkActions" class="mt-6 hidden">
+    <div class="bg-blue-50 border-l-4 border-blue-400 p-4">
+        <div class="flex justify-between items-center">
+            <div>
+                <strong class="text-blue-800"><span id="selectedCount">0</span> students selected</strong>
+            </div>
+            <div class="flex gap-2">
+                <button type="button" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm transition-colors" onclick="bulkAction('activate')">
+                    <i class="fas fa-check mr-1"></i>Activate
+                </button>
+                <button type="button" class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm transition-colors" onclick="bulkAction('deactivate')">
+                    <i class="fas fa-times mr-1"></i>Deactivate
+                </button>
+                <button type="button" class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded text-sm transition-colors" onclick="bulkAction('move')">
+                    <i class="fas fa-arrow-right mr-1"></i>Move Class
+                </button>
+                <button type="button" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition-colors" onclick="bulkAction('delete')">
+                    <i class="fas fa-trash mr-1"></i>Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+// Select All functionality
+document.getElementById('selectAll').addEventListener('change', function() {
+    const checkboxes = document.querySelectorAll('.student-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = this.checked;
+    });
+    updateBulkActions();
+});
+
+// Individual checkbox functionality
+document.querySelectorAll('.student-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', updateBulkActions);
+});
+
+function updateBulkActions() {
+    const selectedCheckboxes = document.querySelectorAll('.student-checkbox:checked');
+    const bulkActions = document.getElementById('bulkActions');
+    const selectedCount = document.getElementById('selectedCount');
+    
+    if (selectedCheckboxes.length > 0) {
+        bulkActions.classList.remove('hidden');
+        selectedCount.textContent = selectedCheckboxes.length;
+    } else {
+        bulkActions.classList.add('hidden');
+    }
+}
+
+// Reset password function
+function resetPassword(studentId) {
+    if (confirm('Are you sure you want to reset this student\'s password?')) {
+        // Create a form and submit it
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `{% url 'reset_student_password' 0 %}`.replace('0', studentId);
+        
+        // Add CSRF token
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+        if (csrfToken) {
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = 'csrfmiddlewaretoken';
+            csrfInput.value = csrfToken.value;
+            form.appendChild(csrfInput);
+        } else {
+            // Add CSRF token from cookie if available
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = 'csrfmiddlewaretoken';
+            csrfInput.value = '{{ csrf_token }}';
+            form.appendChild(csrfInput);
+        }
+        
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+// Delete student function
+function deleteStudent(studentId, studentName) {
+    if (confirm(`Are you sure you want to delete ${studentName}? This action cannot be undone.`)) {
+        // Create a form and submit it
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `{% url 'delete_student' 0 %}`.replace('0', studentId);
+        
+        // Add CSRF token
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = 'csrfmiddlewaretoken';
+        csrfInput.value = '{{ csrf_token }}';
+        form.appendChild(csrfInput);
+        
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+// Bulk actions function
+function bulkAction(action) {
+    const selectedCheckboxes = document.querySelectorAll('.student-checkbox:checked');
+    if (selectedCheckboxes.length === 0) {
+        alert('Please select at least one student.');
+        return;
+    }
+    
+    let confirmMessage = '';
+    switch(action) {
+        case 'activate':
+            confirmMessage = `Activate ${selectedCheckboxes.length} selected students?`;
+            break;
+        case 'deactivate':
+            confirmMessage = `Deactivate ${selectedCheckboxes.length} selected students?`;
+            break;
+        case 'move':
+            confirmMessage = `Move ${selectedCheckboxes.length} selected students to a different class?`;
+            break;
+        case 'delete':
+            confirmMessage = `Delete ${selectedCheckboxes.length} selected students? This action cannot be undone.`;
+            break;
+    }
+    
+    if (confirm(confirmMessage)) {
+        // For now, just show an alert. In a real implementation, you'd submit the form
+        alert(`Bulk ${action} action would be performed on ${selectedCheckboxes.length} students.`);
+    }
+}
+
+// Auto-hide alerts after 5 seconds
+setTimeout(function() {
+    const alerts = document.querySelectorAll('.alert-dismissible');
+    alerts.forEach(alert => {
+        const closeButton = alert.querySelector('.btn-close');
+        if (closeButton) {
+            closeButton.click();
+        }
+    });
+}, 5000);
+</script>
+{% endblock %}
