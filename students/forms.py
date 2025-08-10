@@ -25,41 +25,41 @@ class StudentEnrollmentForm(forms.ModelForm):
         
         widgets = {
             'student_id': forms.TextInput(attrs={
-                'class': 'form-control',
+                'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500',
                 'placeholder': 'e.g., STD001, STD002',
                 'maxlength': 20
             }),
             'student_number': forms.TextInput(attrs={
-                'class': 'form-control',
+                'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500',
                 'placeholder': 'e.g., 2024001, 2024002',
                 'maxlength': 20
             }),
             'photo': forms.FileInput(attrs={
-                'class': 'form-control',
+                'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100',
                 'accept': 'image/jpeg,image/jpg,image/png'
             }),
             'first_name': forms.TextInput(attrs={
-                'class': 'form-control',
+                'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500',
                 'placeholder': 'Enter first name',
                 'maxlength': 50
             }),
             'last_name': forms.TextInput(attrs={
-                'class': 'form-control',
+                'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500',
                 'placeholder': 'Enter last name',
                 'maxlength': 50
             }),
             'sex': forms.Select(attrs={
-                'class': 'form-control'
+                'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500'
             }),
             'date_of_birth': forms.DateInput(attrs={
-                'class': 'form-control',
+                'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500',
                 'type': 'date'
             }),
             'level': forms.Select(attrs={
-                'class': 'form-control'
+                'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500'
             }),
             'room': forms.Select(attrs={
-                'class': 'form-control'
+                'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500'
             })
         }
         
@@ -218,7 +218,7 @@ class StudentSearchForm(forms.Form):
         max_length=100,
         required=False,
         widget=forms.TextInput(attrs={
-            'class': 'form-control',
+            'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500',
             'placeholder': 'Search by name, student ID, or student number...'
         }),
         label='Search Students'
@@ -227,21 +227,27 @@ class StudentSearchForm(forms.Form):
     level = forms.ChoiceField(
         choices=[('', 'All Levels')] + Student.LEVEL_CHOICES,
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control'}),
+        widget=forms.Select(attrs={
+            'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500'
+        }),
         label='Filter by Level'
     )
     
     room = forms.ChoiceField(
         choices=[('', 'All Rooms')] + Student.ROOM_CHOICES,
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control'}),
+        widget=forms.Select(attrs={
+            'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500'
+        }),
         label='Filter by Room'
     )
     
     sex = forms.ChoiceField(
         choices=[('', 'All Genders')] + Student.SEX_CHOICES,
         required=False,
-        widget=forms.Select(attrs={'class': 'form-control'}),
+        widget=forms.Select(attrs={
+            'class': 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500'
+        }),
         label='Filter by Gender'
     )
 

@@ -18,6 +18,6 @@ urlpatterns = [
     path('students/<int:pk>/personality/', views.student_personality, name='student_personality'),
     path('students/<int:pk>/holland-questionnaire/', views.holland_questionnaire, name='holland_questionnaire'),
     path('students/<int:pk>/submit-holland-questionnaire/', views.submit_holland_questionnaire, name='submit_holland_questionnaire'),
-    path('students/<int:pk>/gardner-questionnaire/', views.gardner_questionnaire, name='gardner_questionnaire'),
-    path('students/<int:pk>/submit-gardner-questionnaire/', views.submit_gardner_questionnaire, name='submit_gardner_questionnaire'),
+    path('students/<int:pk>/ss-career-discovery/', views.ss_career_discovery, name='ss_career_discovery'),
+    path('students/<int:pk>/submit-ss-career-discovery/', views.submit_ss_career_discovery, name='submit_ss_career_discovery'),
 ]

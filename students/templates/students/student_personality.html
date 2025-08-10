@@ -42,8 +42,8 @@
                     <a href="{% url 'holland_questionnaire' student.pk %}" class="w-full bg-white border border-primary-300 text-primary-600 hover:bg-primary-50 px-4 py-2 rounded-lg font-medium transition-colors inline-flex items-center justify-center">
                         <i class="fas fa-user-tie mr-2"></i>เริ่มทำแบบทดสอบ Holland
                     </a>
-                    <a href="{% url 'gardner_questionnaire' student.pk %}" class="w-full bg-white border border-green-300 text-green-600 hover:bg-green-50 px-4 py-2 rounded-lg font-medium transition-colors inline-flex items-center justify-center">
-                        <i class="fas fa-brain mr-2"></i>เริ่มทำแบบทดสอบ Gardner
+                    <a href="{% url 'ss_career_discovery' student.pk %}" class="w-full bg-white border border-green-300 text-green-600 hover:bg-green-50 px-4 py-2 rounded-lg font-medium transition-colors inline-flex items-center justify-center">
+                        <i class="fas fa-brain mr-2"></i>เริ่มทำ Samsung Career Discovery
                     </a>
                     <a href="{% url 'student_detail' student.pk %}" class="w-full bg-white border border-gray-300 text-gray-600 hover:bg-gray-50 px-4 py-2 rounded-lg font-medium transition-colors inline-flex items-center justify-center">
                         <i class="fas fa-arrow-left mr-2"></i>กลับไปหน้ารายละเอียด
@@ -169,12 +169,12 @@
                 <div class="bg-green-600 text-white rounded-t-lg px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <div>
                         <h5 class="text-lg font-semibold mb-1">
-                            <i class="fas fa-brain mr-2"></i>B2 ดำเนินความพฤติกรรมพหุปัญญา Dr. Howard Gardner
+                            <i class="fas fa-brain mr-2"></i>Samsung Career Discovery Assessment
                         </h5>
                         <small class="text-green-100">Multiple Intelligence Assessment</small>
                     </div>
                     <div>
-                        <a href="{% url 'gardner_questionnaire' student.pk %}" class="bg-white text-green-600 hover:bg-green-50 px-3 py-1 rounded text-sm font-medium transition-colors inline-flex items-center">
+                        <a href="{% url 'ss_career_discovery' student.pk %}" class="bg-white text-green-600 hover:bg-green-50 px-3 py-1 rounded text-sm font-medium transition-colors inline-flex items-center">
                             <i class="fas fa-edit mr-1"></i> แก้ไข
                         </a>
                     </div>
@@ -270,15 +270,15 @@
             <div class="bg-white rounded-lg shadow-lg">
                 <div class="bg-gray-100 rounded-t-lg px-6 py-4">
                     <h5 class="text-lg font-semibold text-gray-600 mb-0">
-                        <i class="fas fa-brain mr-2"></i>B2 ดำเนินความพฤติกรรมพหุปัญญา Dr. Howard Gardner
+                        <i class="fas fa-brain mr-2"></i>Samsung Career Discovery Assessment
                     </h5>
                 </div>
                 <div class="p-8 text-center">
                     <i class="fas fa-brain text-6xl text-gray-400 mb-4"></i>
                     <h5 class="text-xl font-semibold text-gray-600 mb-2">ยังไม่ได้ทำแบบทดสอบ</h5>
                     <p class="text-gray-500 mb-6">เริ่มทำแบบทดสอบพหุปัญญาตามทฤษฎี Dr. Howard Gardner</p>
-                    <a href="{% url 'gardner_questionnaire' student.pk %}" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors inline-flex items-center">
-                        <i class="fas fa-play mr-2"></i>เริ่มทำแบบทดสอบ
+                    <a href="{% url 'ss_career_discovery' student.pk %}" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors inline-flex items-center">
+                        <i class="fas fa-play mr-2"></i>เริ่มทำ Samsung Career Discovery
                     </a>
                 </div>
             </div>

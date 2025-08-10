@@ -281,19 +281,19 @@ def submit_holland_questionnaire(request, pk):
     return redirect('holland_questionnaire', pk=student.pk)
 
 
-def gardner_questionnaire(request, pk):
-    """Display Gardner Multiple Intelligence Questionnaire"""
+def ss_career_discovery(request, pk):
+    """Display Samsung Career Discovery Assessment"""
     student = get_object_or_404(Student, pk=pk)
     
     context = {
         'student': student,
-        'title': f'Gardner Questionnaire - {student.full_name}'
+        'title': f'Samsung Career Discovery - {student.full_name}'
     }
-    return render(request, 'students/gardner_questionnaire.html', context)
+    return render(request, 'students/career_discovery.html', context)
 
 
-def submit_gardner_questionnaire(request, pk):
-    """Process Gardner Multiple Intelligence Questionnaire submission"""
+def submit_ss_career_discovery(request, pk):
+    """Process Samsung Career Discovery Assessment submission"""
     student = get_object_or_404(Student, pk=pk)
     
     if request.method == 'POST':
@@ -307,7 +307,7 @@ def submit_gardner_questionnaire(request, pk):
                 responses[f'q{i}'] = int(response)
             else:
                 messages.error(request, f'กรุณาตอบคำถามข้อที่ {i}')
-                return redirect('gardner_questionnaire', pk=student.pk)
+                return redirect('ss_career_discovery', pk=student.pk)
         
         # Map questions to intelligence types (updated mapping for 41 questions)
         question_mapping = {
@@ -375,12 +375,12 @@ def submit_gardner_questionnaire(request, pk):
         
         messages.success(
             request,
-            f'แบบทดสอบพหุปัญญาเสร็จสิ้นเรียบร้อย! ผลการทดสอบของ {student.full_name} ได้รับการบันทึกแล้ว'
+            f'Samsung Career Discovery เสร็จสิ้นเรียบร้อย! ผลการทดสอบของ {student.full_name} ได้รับการบันทึกแล้ว'
         )
         return redirect('student_personality', pk=student.pk)
     
     # If not POST, redirect to questionnaire
-    return redirect('gardner_questionnaire', pk=student.pk)
+    return redirect('ss_career_discovery', pk=student.pk)
 
 
 def delete_student(request, pk):
