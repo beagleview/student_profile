@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.core.paginator import Paginator
 from .models import Student, HollandTest, GardnerTest, HollandQuestionnaireResult, GardnerQuestionnaireResult
-from .forms import StudentEnrollmentForm, StudentSearchForm, HollandTestForm, GardnerTestForm, HollandQuestionnaireForm, GardnerQuestionnaireForm
+from .forms import StudentEnrollmentForm, StudentSearchForm, HollandQuestionnaireForm, GardnerQuestionnaireForm
 
 
 def student_list(request):
@@ -202,85 +202,6 @@ def reset_student_password(request, pk):
     return redirect('teacher_admin')
 
 
-def holland_test(request, pk):
-    """Handle Holland Career Interest Test"""
-    student = get_object_or_404(Student, pk=pk)
-    
-    if request.method == 'POST':
-        form = HollandTestForm(request.POST)
-        if form.is_valid():
-            holland_test = form.save(commit=False)
-            holland_test.student = student
-            holland_test.save()
-            messages.success(
-                request, 
-                f'Holland Test completed for {student.full_name}!'
-            )
-            return redirect('student_personality', pk=student.pk)
-        else:
-            messages.error(request, 'Please correct the errors below.')
-    else:
-        # Pre-fill with random sample data for demonstration
-        initial_data = {
-            'realistic_score': 75,
-            'investigative_score': 82,
-            'artistic_score': 65,
-            'social_score': 70,
-            'enterprising_score': 45,
-            'conventional_score': 55,
-            'primary_type': 'I',
-            'secondary_type': 'R'
-        }
-        form = HollandTestForm(initial=initial_data)
-    
-    context = {
-        'form': form,
-        'student': student,
-        'title': f'Holland Test - {student.full_name}'
-    }
-    return render(request, 'students/holland_test.html', context)
-
-
-def gardner_test(request, pk):
-    """Handle Gardner Multiple Intelligence Test"""
-    student = get_object_or_404(Student, pk=pk)
-    
-    if request.method == 'POST':
-        form = GardnerTestForm(request.POST)
-        if form.is_valid():
-            gardner_test = form.save(commit=False)
-            gardner_test.student = student
-            gardner_test.save()
-            messages.success(
-                request, 
-                f'Gardner Test completed for {student.full_name}!'
-            )
-            return redirect('student_personality', pk=student.pk)
-        else:
-            messages.error(request, 'Please correct the errors below.')
-    else:
-        # Pre-fill with random sample data for demonstration
-        initial_data = {
-            'linguistic_score': 78,
-            'logical_score': 85,
-            'spatial_score': 60,
-            'musical_score': 45,
-            'bodily_score': 55,
-            'interpersonal_score': 72,
-            'intrapersonal_score': 68,
-            'naturalist_score': 40,
-            'primary_intelligence': 'logical',
-            'secondary_intelligence': 'linguistic'
-        }
-        form = GardnerTestForm(initial=initial_data)
-    
-    context = {
-        'form': form,
-        'student': student,
-        'title': f'Gardner Test - {student.full_name}'
-    }
-    return render(request, 'students/gardner_test.html', context)
-
 
 def student_personality(request, pk):
     """Display student personality test results dashboard"""
@@ -376,49 +297,87 @@ def submit_gardner_questionnaire(request, pk):
     student = get_object_or_404(Student, pk=pk)
     
     if request.method == 'POST':
-        form = GardnerQuestionnaireForm(request.POST)
+        # Create a custom form handler for the 41-question format
+        responses = {}
         
-        if form.is_valid():
-            # Calculate scores from questionnaire responses
-            scores = form.calculate_gardner_scores()
+        # Collect all 41 responses
+        for i in range(1, 42):
+            response = request.POST.get(f'q{i}')
+            if response is not None:
+                responses[f'q{i}'] = int(response)
+            else:
+                messages.error(request, f'กรุณาตอบคำถามข้อที่ {i}')
+                return redirect('gardner_questionnaire', pk=student.pk)
+        
+        # Map questions to intelligence types (updated mapping for 41 questions)
+        question_mapping = {
+            # Linguistic Intelligence - Questions: 1, 10, 17, 25, 34
+            'linguistic': [1, 10, 17, 25, 34],
+            # Musical Intelligence - Questions: 2, 11, 20, 30, 40
+            'musical': [2, 11, 20, 30, 40],
+            # Bodily-Kinesthetic Intelligence - Questions: 3, 9, 26, 27, 31, 37
+            'bodily': [3, 9, 26, 27, 31, 37],
+            # Interpersonal Intelligence - Questions: 4, 12, 18, 35, 39
+            'interpersonal': [4, 12, 18, 35, 39],
+            # Logical-Mathematical Intelligence - Questions: 5, 15, 22, 32
+            'logical': [5, 15, 22, 32],
+            # Naturalist Intelligence - Questions: 6, 13, 16, 23, 38
+            'naturalist': [6, 13, 16, 23, 38],
+            # Spatial Intelligence - Questions: 7, 19, 24, 29, 33
+            'spatial': [7, 19, 24, 29, 33],
+            # Intrapersonal Intelligence - Questions: 8, 14, 21, 28, 36, 41
+            'intrapersonal': [8, 14, 21, 28, 36, 41]
+        }
+        
+        # Calculate scores for each intelligence type
+        scores = {}
+        for intelligence, questions in question_mapping.items():
+            total_score = 0
+            for q_num in questions:
+                total_score += responses.get(f'q{q_num}', 0)
             
-            # Determine primary and secondary intelligence types
-            sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
-            primary_intelligence = sorted_scores[0][0] if sorted_scores else 'linguistic'
-            secondary_intelligence = sorted_scores[1][0] if len(sorted_scores) > 1 else 'logical'
-            
-            # Create GardnerTest record
-            gardner_test = GardnerTest.objects.create(
-                student=student,
-                linguistic_score=scores.get('linguistic', 0),
-                logical_score=scores.get('logical', 0),
-                spatial_score=scores.get('spatial', 0),
-                musical_score=scores.get('musical', 0),
-                bodily_score=scores.get('bodily', 0),
-                interpersonal_score=scores.get('interpersonal', 0),
-                intrapersonal_score=scores.get('intrapersonal', 0),
-                naturalist_score=scores.get('naturalist', 0),
-                primary_intelligence=primary_intelligence,
-                secondary_intelligence=secondary_intelligence
-            )
-            
-            # Save individual questionnaire responses
-            questionnaire_responses = {f'q{i}': int(form.cleaned_data.get(f'q{i}', 1)) for i in range(1, 25)}
-            questionnaire_result = GardnerQuestionnaireResult.objects.create(
-                student=student,
-                gardner_test=gardner_test,
-                **questionnaire_responses
-            )
-            
-            messages.success(
-                request,
-                f'แบบทดสอบพหุปัญญาเสร็จสิ้นเรียบร้อย! ผลการทดสอบของ {student.full_name} ได้รับการบันทึกแล้ว'
-            )
-            return redirect('student_personality', pk=student.pk)
-        else:
-            messages.error(request, 'กรุณาตรวจสอบข้อมูลและทำการแก้ไข')
-            # Redirect back to questionnaire with form errors
-            return redirect('gardner_questionnaire', pk=student.pk)
+            # Convert to percentage (max score per question is 3, so max total varies by intelligence)
+            max_possible = len(questions) * 3
+            percentage_score = round((total_score / max_possible) * 100) if max_possible > 0 else 0
+            scores[intelligence] = percentage_score
+        
+        # Determine primary and secondary intelligence types
+        sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+        primary_intelligence = sorted_scores[0][0] if sorted_scores else 'linguistic'
+        secondary_intelligence = sorted_scores[1][0] if len(sorted_scores) > 1 else 'logical'
+        
+        # Create GardnerTest record
+        gardner_test = GardnerTest.objects.create(
+            student=student,
+            linguistic_score=scores.get('linguistic', 0),
+            logical_score=scores.get('logical', 0),
+            spatial_score=scores.get('spatial', 0),
+            musical_score=scores.get('musical', 0),
+            bodily_score=scores.get('bodily', 0),
+            interpersonal_score=scores.get('interpersonal', 0),
+            intrapersonal_score=scores.get('intrapersonal', 0),
+            naturalist_score=scores.get('naturalist', 0),
+            primary_intelligence=primary_intelligence,
+            secondary_intelligence=secondary_intelligence
+        )
+        
+        # For compatibility with existing GardnerQuestionnaireResult model (24 questions)
+        # Map the first 24 responses to match the model fields
+        questionnaire_responses = {}
+        for i in range(1, 25):
+            questionnaire_responses[f'q{i}'] = responses.get(f'q{i}', 0)
+        
+        questionnaire_result = GardnerQuestionnaireResult.objects.create(
+            student=student,
+            gardner_test=gardner_test,
+            **questionnaire_responses
+        )
+        
+        messages.success(
+            request,
+            f'แบบทดสอบพหุปัญญาเสร็จสิ้นเรียบร้อย! ผลการทดสอบของ {student.full_name} ได้รับการบันทึกแล้ว'
+        )
+        return redirect('student_personality', pk=student.pk)
     
     # If not POST, redirect to questionnaire
     return redirect('gardner_questionnaire', pk=student.pk)

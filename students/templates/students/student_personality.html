@@ -61,12 +61,12 @@
                 <div class="bg-blue-600 text-white rounded-t-lg px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <div>
                         <h5 class="text-lg font-semibold mb-1">
-                            <i class="fas fa-briefcase mr-2"></i>B1 ดำเนินความพฤติกรรมด้วคาที่จึงการ Dr. John L Holland
+                            <i class="fas fa-briefcase mr-2"></i>แบบทดสอบความสนใจอาชีพ Dr. John L Holland
                         </h5>
                         <small class="text-blue-100">Career Interest Assessment</small>
                     </div>
                     <div>
-                        <a href="{% url 'holland_test' student.pk %}" class="bg-white text-blue-600 hover:bg-blue-50 px-3 py-1 rounded text-sm font-medium transition-colors inline-flex items-center">
+                        <a href="{% url 'holland_questionnaire' student.pk %}" class="bg-white text-blue-600 hover:bg-blue-50 px-3 py-1 rounded text-sm font-medium transition-colors inline-flex items-center">
                             <i class="fas fa-edit mr-1"></i> แก้ไข
                         </a>
                     </div>
@@ -149,7 +149,7 @@
             <div class="bg-white rounded-lg shadow-lg mb-6">
                 <div class="bg-gray-100 rounded-t-lg px-6 py-4">
                     <h5 class="text-lg font-semibold text-gray-600 mb-0">
-                        <i class="fas fa-briefcase mr-2"></i>B1 ดำเนินความพฤติกรรมด้วคาที่จึงการ Dr. John L Holland
+                        <i class="fas fa-briefcase mr-2"></i>แบบทดสอบความสนใจอาชีพ Dr. John L Holland
                     </h5>
                 </div>
                 <div class="p-8 text-center">
@@ -174,7 +174,7 @@
                         <small class="text-green-100">Multiple Intelligence Assessment</small>
                     </div>
                     <div>
-                        <a href="{% url 'gardner_test' student.pk %}" class="bg-white text-green-600 hover:bg-green-50 px-3 py-1 rounded text-sm font-medium transition-colors inline-flex items-center">
+                        <a href="{% url 'gardner_questionnaire' student.pk %}" class="bg-white text-green-600 hover:bg-green-50 px-3 py-1 rounded text-sm font-medium transition-colors inline-flex items-center">
                             <i class="fas fa-edit mr-1"></i> แก้ไข
                         </a>
                     </div>
@@ -301,7 +301,7 @@
                     <div class="col-md-6">
                         <h6 class="text-primary">ลำดับ 1</h6>
                         <div class="alert alert-primary">
-                            <h6>ซองนข้าผตระเนียนเบนดผนผลแสอยรูดักงับค๊ม</h6>
+                            <h6>ความสามารถด้านการวิเคราะห์และการคิดอย่างเป็นระบบ</h6>
                             <div class="progress mb-2">
                                 <div class="progress-bar bg-primary" style="width: 66.67%">66.67%</div>
                             </div>

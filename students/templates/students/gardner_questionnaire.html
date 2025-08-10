@@ -10,7 +10,7 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
                         <h4 class="text-xl font-semibold mb-2">
-                            <i class="fas fa-brain mr-2"></i>แบบสอบถามพหุปัญญา Gardner
+                            <i class="fas fa-brain mr-2"></i>แบบสำรวจเพื่อการค้นพบตัวเอง
                         </h4>
                         <p class="text-green-100 mb-0">ประเมินความถนัดของคุณในด้านต่างๆ ตามทฤษฎี Dr. Howard Gardner</p>
                     </div>
@@ -42,31 +42,27 @@
                 <!-- Instructions -->
                 <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
                     <h6 class="text-green-800 font-semibold mb-2">
-                        <i class="fas fa-info-circle mr-2"></i>คำแนะนำในการทำแบบสอบถาม
+                        <i class="fas fa-info-circle mr-2"></i>คำแนะนำในการทำแบบสำรวจ
                     </h6>
                     <p class="text-green-700 text-sm mb-2">
-                        กรุณาให้คะแนนตามความจริงของคุณในแต่ละข้อความ โดยใช้เกณฑ์ต่อไปนี้:
+                        โปรดให้คะแนนแต่ละข้อตามระดับที่ตรงกับตัวคุณมากที่สุด เพื่อค้นหาความสามารถที่โดดเด่นในตัวคุณ
                     </p>
-                    <div class="grid grid-cols-2 md:grid-cols-5 gap-2 text-xs">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
                         <div class="bg-white p-2 rounded border text-center">
-                            <div class="font-bold text-red-600">1</div>
-                            <div>ไม่เห็นด้วยเลย</div>
+                            <div class="font-bold text-red-600">0</div>
+                            <div>ไม่เลย</div>
                         </div>
                         <div class="bg-white p-2 rounded border text-center">
-                            <div class="font-bold text-orange-500">2</div>
-                            <div>เห็นด้วยน้อย</div>
+                            <div class="font-bold text-orange-500">1</div>
+                            <div>น้อย</div>
                         </div>
                         <div class="bg-white p-2 rounded border text-center">
-                            <div class="font-bold text-yellow-500">3</div>
+                            <div class="font-bold text-yellow-500">2</div>
                             <div>ปานกลาง</div>
                         </div>
                         <div class="bg-white p-2 rounded border text-center">
-                            <div class="font-bold text-green-500">4</div>
-                            <div>เห็นด้วยมาก</div>
-                        </div>
-                        <div class="bg-white p-2 rounded border text-center">
-                            <div class="font-bold text-green-700">5</div>
-                            <div>เห็นด้วยมากที่สุด</div>
+                            <div class="font-bold text-green-600">3</div>
+                            <div>ใช่ที่สุด</div>
                         </div>
                     </div>
                 </div>
@@ -75,7 +71,7 @@
                 <div class="mb-6">
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-sm font-medium text-gray-700">ความคืบหน้า</span>
-                        <span class="text-sm font-medium text-gray-700"><span id="progress-count">0</span>/24 ข้อ</span>
+                        <span class="text-sm font-medium text-gray-700"><span id="progress-count">0</span>/41 ข้อ</span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-2">
                         <div id="progress-bar" class="bg-green-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
@@ -86,582 +82,753 @@
                 <form id="questionnaireForm" method="post" action="{% url 'submit_gardner_questionnaire' student.pk %}">
                     {% csrf_token %}
                     
-                    <!-- Questions by Intelligence Type -->
-                    <div class="space-y-6" id="questions-container">
-                        <!-- Linguistic Intelligence -->
-                        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
-                            <h5 class="text-red-800 font-semibold mb-4 flex items-center">
-                                <i class="fas fa-book mr-2"></i>ปัญญาด้านภาษา (Linguistic)
-                            </h5>
-                            <div class="space-y-4">
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">1. ชอบอ่านหนังสือ และสามารถเล่าเรื่องที่อ่านให้คนอื่นฟังได้ดี</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q1" value="1" class="mr-1 text-red-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q1" value="2" class="mr-1 text-red-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q1" value="3" class="mr-1 text-red-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q1" value="4" class="mr-1 text-red-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q1" value="5" class="mr-1 text-red-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">2. สนุกกับการเล่นคำ เช่น ต่อคำกลอน, คำผวน, หรือปริศนาอักษรไขว้</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q2" value="1" class="mr-1 text-red-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q2" value="2" class="mr-1 text-red-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q2" value="3" class="mr-1 text-red-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q2" value="4" class="mr-1 text-red-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q2" value="5" class="mr-1 text-red-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">3. สามารถเขียนอธิบายความคิดหรือเรื่องราวต่างๆ ได้อย่างชัดเจน</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q3" value="1" class="mr-1 text-red-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q3" value="2" class="mr-1 text-red-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q3" value="3" class="mr-1 text-red-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q3" value="4" class="mr-1 text-red-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q3" value="5" class="mr-1 text-red-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
+                    <!-- Questions -->
+                    <div class="space-y-4" id="questions-container">
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">1. ฉันชอบการพูดเล่นคำ สำนวน คำผวน คำคล้องจองต่างๆ</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q1" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q1" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q1" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q1" value="3" class="mr-1 text-green-600"> 3
+                                </label>
                             </div>
                         </div>
 
-                        <!-- Logical-Mathematical Intelligence -->
-                        <div class="bg-teal-50 border border-teal-200 rounded-lg p-4">
-                            <h5 class="text-teal-800 font-semibold mb-4 flex items-center">
-                                <i class="fas fa-calculator mr-2"></i>ปัญญาด้านคณิตศาสตร์-ตรรกะ (Logical-Mathematical)
-                            </h5>
-                            <div class="space-y-4">
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">4. ชอบทำงานกับตัวเลข และสนุกกับการแก้โจทย์ปัญหาคณิตศาสตร์</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q4" value="1" class="mr-1 text-teal-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q4" value="2" class="mr-1 text-teal-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q4" value="3" class="mr-1 text-teal-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q4" value="4" class="mr-1 text-teal-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q4" value="5" class="mr-1 text-teal-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">5. มักจะมองหาเหตุผลและความเชื่อมโยงของสิ่งต่างๆ รอบตัว</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q5" value="1" class="mr-1 text-teal-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q5" value="2" class="mr-1 text-teal-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q5" value="3" class="mr-1 text-teal-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q5" value="4" class="mr-1 text-teal-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q5" value="5" class="mr-1 text-teal-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">6. ชอบวางแผนสิ่งต่างๆ อย่างเป็นขั้นเป็นตอน</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q6" value="1" class="mr-1 text-teal-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q6" value="2" class="mr-1 text-teal-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q6" value="3" class="mr-1 text-teal-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q6" value="4" class="mr-1 text-teal-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q6" value="5" class="mr-1 text-teal-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">2. ฉันสามารถใช้เวลาว่างกับเครื่องดนตรีง่ายๆ สักชิ้น</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q2" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q2" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q2" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q2" value="3" class="mr-1 text-green-600"> 3
+                                </label>
                             </div>
                         </div>
 
-                        <!-- Spatial Intelligence -->
-                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                            <h5 class="text-blue-800 font-semibold mb-4 flex items-center">
-                                <i class="fas fa-cube mr-2"></i>ปัญญาด้านมิติสัมพันธ์ (Spatial)
-                            </h5>
-                            <div class="space-y-4">
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">7. สามารถจินตนาการภาพในหัวและมองเห็นเป็นภาพสามมิติได้</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q7" value="1" class="mr-1 text-blue-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q7" value="2" class="mr-1 text-blue-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q7" value="3" class="mr-1 text-blue-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q7" value="4" class="mr-1 text-blue-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q7" value="5" class="mr-1 text-blue-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">8. มีความสามารถในการอ่านแผนที่หรือจดจำเส้นทางได้ดี</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q8" value="1" class="mr-1 text-blue-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q8" value="2" class="mr-1 text-blue-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q8" value="3" class="mr-1 text-blue-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q8" value="4" class="mr-1 text-blue-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q8" value="5" class="mr-1 text-blue-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">9. ชอบวาดรูป, ออกแบบ, หรือจัดวางสิ่งของให้สวยงาม</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q9" value="1" class="mr-1 text-blue-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q9" value="2" class="mr-1 text-blue-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q9" value="3" class="mr-1 text-blue-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q9" value="4" class="mr-1 text-blue-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q9" value="5" class="mr-1 text-blue-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">3. ฉันชอบเข้าร่วมกิจกรรมที่ต้องเคลื่อนไหวร่างกาย หรือเล่นกีฬา อยู่เป็นประจำ</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q3" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q3" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q3" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q3" value="3" class="mr-1 text-green-600"> 3
+                                </label>
                             </div>
                         </div>
 
-                        <!-- Bodily-Kinesthetic Intelligence -->
-                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                            <h5 class="text-yellow-800 font-semibold mb-4 flex items-center">
-                                <i class="fas fa-running mr-2"></i>ปัญญาด้านกายเคลื่อนไหว (Bodily-Kinesthetic)
-                            </h5>
-                            <div class="space-y-4">
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">10. เรียนรู้ได้ดีที่สุดเมื่อได้ลงมือทำด้วยตัวเอง</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q10" value="1" class="mr-1 text-yellow-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q10" value="2" class="mr-1 text-yellow-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q10" value="3" class="mr-1 text-yellow-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q10" value="4" class="mr-1 text-yellow-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q10" value="5" class="mr-1 text-yellow-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">11. ชอบเล่นกีฬาหรือทำกิจกรรมที่ต้องเคลื่อนไหวร่างกาย</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q11" value="1" class="mr-1 text-yellow-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q11" value="2" class="mr-1 text-yellow-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q11" value="3" class="mr-1 text-yellow-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q11" value="4" class="mr-1 text-yellow-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q11" value="5" class="mr-1 text-yellow-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">12. มีความสามารถในการใช้มือประดิษฐ์หรือซ่อมแซมสิ่งของ</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q12" value="1" class="mr-1 text-yellow-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q12" value="2" class="mr-1 text-yellow-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q12" value="3" class="mr-1 text-yellow-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q12" value="4" class="mr-1 text-yellow-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q12" value="5" class="mr-1 text-yellow-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">4. ฉันสามารถพูดชักจูงให้ผู้อื่นมาร่วมทำสิ่งที่ฉันต้องการให้สำเร็จได้</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q4" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q4" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q4" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q4" value="3" class="mr-1 text-green-600"> 3
+                                </label>
                             </div>
                         </div>
 
-                        <!-- Musical Intelligence -->
-                        <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
-                            <h5 class="text-purple-800 font-semibold mb-4 flex items-center">
-                                <i class="fas fa-music mr-2"></i>ปัญญาด้านดนตรี (Musical)
-                            </h5>
-                            <div class="space-y-4">
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">13. สามารถจดจำทำนองเพลงได้ง่ายและรวดเร็ว</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q13" value="1" class="mr-1 text-purple-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q13" value="2" class="mr-1 text-purple-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q13" value="3" class="mr-1 text-purple-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q13" value="4" class="mr-1 text-purple-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q13" value="5" class="mr-1 text-purple-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">14. ชอบร้องเพลง, เล่นดนตรี, หรือฟังเพลงเป็นประจำ</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q14" value="1" class="mr-1 text-purple-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q14" value="2" class="mr-1 text-purple-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q14" value="3" class="mr-1 text-purple-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q14" value="4" class="mr-1 text-purple-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q14" value="5" class="mr-1 text-purple-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">15. มักจะรู้สึกถึงจังหวะและเสียงต่างๆ รอบตัวได้ดี</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q15" value="1" class="mr-1 text-purple-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q15" value="2" class="mr-1 text-purple-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q15" value="3" class="mr-1 text-purple-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q15" value="4" class="mr-1 text-purple-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q15" value="5" class="mr-1 text-purple-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">5. ฉันชอบเล่นหมากรุก หมากฮอส หรือเกมกลยุทธ์ต่างๆ</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q5" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q5" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q5" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q5" value="3" class="mr-1 text-green-600"> 3
+                                </label>
                             </div>
                         </div>
 
-                        <!-- Interpersonal Intelligence -->
-                        <div class="bg-pink-50 border border-pink-200 rounded-lg p-4">
-                            <h5 class="text-pink-800 font-semibold mb-4 flex items-center">
-                                <i class="fas fa-handshake mr-2"></i>ปัญญาด้านมนุษยสัมพันธ์ (Interpersonal)
-                            </h5>
-                            <div class="space-y-4">
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">16. ชอบทำงานร่วมกับผู้อื่นและเป็นส่วนหนึ่งของทีม</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q16" value="1" class="mr-1 text-pink-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q16" value="2" class="mr-1 text-pink-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q16" value="3" class="mr-1 text-pink-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q16" value="4" class="mr-1 text-pink-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q16" value="5" class="mr-1 text-pink-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">17. สามารถเข้าใจความรู้สึกและมุมมองของคนอื่นได้ดี</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q17" value="1" class="mr-1 text-pink-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q17" value="2" class="mr-1 text-pink-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q17" value="3" class="mr-1 text-pink-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q17" value="4" class="mr-1 text-pink-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q17" value="5" class="mr-1 text-pink-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">18. เป็นผู้ให้คำปรึกษาที่ดีและเพื่อนๆ มักจะมาขอความช่วยเหลือ</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q18" value="1" class="mr-1 text-pink-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q18" value="2" class="mr-1 text-pink-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q18" value="3" class="mr-1 text-pink-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q18" value="4" class="mr-1 text-pink-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q18" value="5" class="mr-1 text-pink-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">6. ฉันสนุกกับการปลูกต้นไม้หรือดูแลสัตว์เลี้ยง</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q6" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q6" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q6" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q6" value="3" class="mr-1 text-green-600"> 3
+                                </label>
                             </div>
                         </div>
 
-                        <!-- Intrapersonal Intelligence -->
-                        <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
-                            <h5 class="text-indigo-800 font-semibold mb-4 flex items-center">
-                                <i class="fas fa-user-check mr-2"></i>ปัญญาด้านเข้าใจตนเอง (Intrapersonal)
-                            </h5>
-                            <div class="space-y-4">
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">19. รู้จักจุดแข็งและจุดอ่อนของตัวเองเป็นอย่างดี</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q19" value="1" class="mr-1 text-indigo-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q19" value="2" class="mr-1 text-indigo-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q19" value="3" class="mr-1 text-indigo-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q19" value="4" class="mr-1 text-indigo-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q19" value="5" class="mr-1 text-indigo-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">20. ชอบใช้เวลาอยู่กับตัวเองเพื่อคิดทบทวนเรื่องต่างๆ</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q20" value="1" class="mr-1 text-indigo-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q20" value="2" class="mr-1 text-indigo-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q20" value="3" class="mr-1 text-indigo-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q20" value="4" class="mr-1 text-indigo-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q20" value="5" class="mr-1 text-indigo-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">21. มีเป้าหมายในชีวิตที่ชัดเจนและรู้ว่าตัวเองต้องการอะไร</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q21" value="1" class="mr-1 text-indigo-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q21" value="2" class="mr-1 text-indigo-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q21" value="3" class="mr-1 text-indigo-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q21" value="4" class="mr-1 text-indigo-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q21" value="5" class="mr-1 text-indigo-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">7. ฉันสามารถจินตนาการภาพในหัวได้อย่างชัดเจน</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q7" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q7" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q7" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q7" value="3" class="mr-1 text-green-600"> 3
+                                </label>
                             </div>
                         </div>
 
-                        <!-- Naturalist Intelligence -->
-                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
-                            <h5 class="text-green-800 font-semibold mb-4 flex items-center">
-                                <i class="fas fa-leaf mr-2"></i>ปัญญาด้านธรรมชาติวิทยา (Naturalist)
-                            </h5>
-                            <div class="space-y-4">
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">22. ชอบใช้เวลาอยู่กับธรรมชาติ เช่น เดินป่า, ทำสวน, หรือดูแลสัตว์เลี้ยง</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q22" value="1" class="mr-1 text-green-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q22" value="2" class="mr-1 text-green-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q22" value="3" class="mr-1 text-green-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q22" value="4" class="mr-1 text-green-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q22" value="5" class="mr-1 text-green-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">23. สามารถแยกแยะและจดจำชนิดของพืชหรือสัตว์ต่างๆ ได้</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q23" value="1" class="mr-1 text-green-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q23" value="2" class="mr-1 text-green-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q23" value="3" class="mr-1 text-green-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q23" value="4" class="mr-1 text-green-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q23" value="5" class="mr-1 text-green-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="question-item">
-                                    <p class="text-gray-800 mb-2">24. สนใจเรื่องสิ่งแวดล้อมและปรากฏการณ์ทางธรรมชาติ</p>
-                                    <div class="flex gap-2">
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q24" value="1" class="mr-1 text-green-600"> 1
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q24" value="2" class="mr-1 text-green-600"> 2
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q24" value="3" class="mr-1 text-green-600"> 3
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q24" value="4" class="mr-1 text-green-600"> 4
-                                        </label>
-                                        <label class="flex items-center cursor-pointer">
-                                            <input type="radio" name="q24" value="5" class="mr-1 text-green-600"> 5
-                                        </label>
-                                    </div>
-                                </div>
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">8. ฉันเข้าใจตัวเองดีและรู้ว่าตัวเองต้องการอะไร</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q8" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q8" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q8" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q8" value="3" class="mr-1 text-green-600"> 3
+                                </label>
                             </div>
                         </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">9. ฉันชอบการทำงานที่ต้องใช้มือ เช่น เย็บผ้า ทอผ้า ปั้น แกะสลัก งานไม้ งานโลหะ หรือต่อโมเดล</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q9" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q9" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q9" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q9" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">10. สำหรับฉันวิชาด้านภาษาและสังคม ง่ายกว่า คณิตศาสตร์และวิทยาศาสตร์</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q10" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q10" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q10" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q10" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">11. ฉันมักจะร้องเพลงคลอไปตามทำนองเพลงที่คุ้นเคย</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q11" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q11" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q11" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q11" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">12. เมื่อฉันมีปัญหา การขอความช่วยเหลือจากผู้อื่นไม่ใช่เรื่องยาก</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q12" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q12" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q12" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q12" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">13. ฉันคิดถึงการอนุรักษ์ทรัพยากรธรรมชาติและการรักษาสิ่งแวดล้อมเสมอ</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q13" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q13" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q13" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q13" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">14. ฉันเขียนบันทึกส่วนตัว เกี่ยวกับเรื่องราวที่เกิดขึ้นในชีวิตประจำวัน</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q14" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q14" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q14" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q14" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">15. เมื่อทำงานเป็นกลุ่ม ฉันจะเลือกทำหน้าที่เป็นคนหาข้อมูล</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q15" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q15" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q15" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q15" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">16. ฉันเป็นคนช่างสังเกตธรรมชาติแวดล้อม และรอบรู้เรื่องดิน ฟ้า อากาศ สัตว์ พืช</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q16" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q16" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q16" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q16" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">17. ฉันชอบอ่านทุกอย่าง ไม่ว่าจะเป็นหนังสือ นิตยสาร ป้ายโฆษณา หรือกระดาษห่อของ</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q17" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q17" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q17" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q17" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">18. ฉันสนุกที่จะสอนคนอื่นในสิ่งที่ฉันรู้วิธีทำ</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q18" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q18" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q18" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q18" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">19. ฉันไม่ค่อยหลงทิศหลงทาง แม้จะไปในที่ที่ไม่คุ้นเคย</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q19" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q19" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q19" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q19" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">20. ฉันสามารถบอกได้ถ้าเสียงดนตรีหรือเสียงร้อง เพี้ยนหรือผิดคีย์</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q20" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q20" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q20" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q20" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">21. ฉันรู้ตัวว่าจุดดีและจุดด้อยของฉันคืออะไร</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q21" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q21" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q21" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q21" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">22. ฉันชอบเรียนวิชาคณิตศาสตร์และวิทยาศาสตร์</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q22" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q22" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q22" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q22" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">23. ฉันชอบเรียนรู้ชื่อของสิ่งมีชีวิตรอบตัว เช่น ชื่อต้นไม้ ดอกไม้ สัตว์ต่างๆ</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q23" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q23" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q23" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q23" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">24. ฉันชอบเล่นเกมต่อภาพจิ๊กซอว์ หรือปริศนาเกี่ยวกับภาพ</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q24" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q24" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q24" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q24" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">25. ฉันชอบพูดและเขียนเพื่อสื่อสารสิ่งที่ตัวเองคิด</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q25" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q25" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q25" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q25" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">26. เมื่อของใช้ชำรุดเสียหายหรือใช้งานไม่ได้ ฉันจะดูชิ้นส่วนประกอบและวิธีการทำงานของมัน</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q26" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q26" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q26" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q26" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">27. ฉันมักใช้มือหรือภาษากาย แสดงท่าทางประกอบการสนทนา</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q27" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q27" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q27" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q27" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">28. ฉันมักครุ่นคิดถึงเป้าหมายบางประการที่สำคัญในชีวิตอยู่เสมอๆ</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q28" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q28" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q28" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q28" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">29. ฉันชอบขีดเขียนรูปเล็กๆ น้อยๆ วาดการ์ตูน ลงบนหนังสือ สมุด หรือสิ่งอื่นๆ</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q29" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q29" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q29" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q29" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">30. ฉันมักจะขยับตัวหรือเคาะจังหวะตามเสียงเพลง</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q30" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q30" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q30" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q30" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">31. ฉันเล่นกีฬาได้ดี</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q31" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q31" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q31" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q31" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">32. ฉันชอบตั้งคำถามว่าสิ่งต่างๆ ทำงานอย่างไร</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q32" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q32" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q32" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q32" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">33. ฉันวาดรูป แผนผัง แผนที่ เพื่อช่วยการจดจำ</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q33" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q33" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q33" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q33" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">34. ฉันรู้จักคำมากมายและหลากหลายที่จะใช้ในการสื่อสาร</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q34" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q34" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q34" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q34" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">35. ฉันชอบทำกิจกรรมกลุ่ม หรือเล่นกีฬาเป็นทีม มากกว่ากิจกรรมหรือกีฬาที่ทำคนเดียว</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q35" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q35" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q35" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q35" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">36. ฉันหมั่นสำรวจตนเอง เพื่อเรียนรู้เกี่ยวกับตนเองและพัฒนาตนเองอยู่เรื่อยๆ</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q36" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q36" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q36" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q36" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">37. สำหรับฉัน ไม่ใช่เรื่องยากที่จะเต้นรำหรือออกท่าทางต่างๆ</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q37" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q37" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q37" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q37" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">38. ฉันชอบเที่ยวในที่ที่มีธรรมชาติงดงาม เช่น อุทยานแห่งชาติ ป่าเขา น้ำตก สวนพฤกษศาสตร์</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q38" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q38" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q38" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q38" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">39. ฉันมักจะเป็นคนกลางคอยไกล่เกลี่ยปัญหาระหว่างคนอื่นเสมอ</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q39" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q39" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q39" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q39" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">40. ฉันชอบเล่นดนตรี</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q40" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q40" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q40" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q40" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <p class="text-gray-800 mb-3">41. ฉันใช้เวลาคิดและพิจารณาในเรื่องสำคัญของชีวิต</p>
+                            <div class="flex gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q41" value="0" class="mr-1 text-red-600"> 0
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q41" value="1" class="mr-1 text-orange-500"> 1
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q41" value="2" class="mr-1 text-yellow-500"> 2
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="q41" value="3" class="mr-1 text-green-600"> 3
+                                </label>
+                            </div>
+                        </div>
+                        
                     </div>
 
                     <!-- Submit Buttons -->
                     <div class="mt-8 pt-6 border-t border-gray-200">
                         <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
                             <button type="submit" id="submit-btn" class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-medium transition-colors inline-flex items-center" disabled>
-                                <i class="fas fa-check mr-2"></i>ส่งแบบสอบถาม
+                                <i class="fas fa-check mr-2"></i>ส่งแบบสำรวจ
                             </button>
                             <a href="{% url 'student_personality' student.pk %}" class="bg-white border border-gray-300 text-gray-600 hover:bg-gray-50 px-8 py-3 rounded-lg font-medium transition-colors inline-flex items-center">
                                 <i class="fas fa-times mr-2"></i>ยกเลิก
@@ -675,13 +842,12 @@
 </div>
 
 <script>
-// Add similar JavaScript functionality as Holland questionnaire
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('questionnaireForm');
     const submitBtn = document.getElementById('submit-btn');
     const progressBar = document.getElementById('progress-bar');
     const progressCount = document.getElementById('progress-count');
-    const totalQuestions = 24;
+    const totalQuestions = 41;
     
     const radioInputs = document.querySelectorAll('input[type="radio"]');
     const questionNames = new Set();

@@ -16,10 +16,8 @@ urlpatterns = [
     
     # Personality Tests
     path('students/<int:pk>/personality/', views.student_personality, name='student_personality'),
-    path('students/<int:pk>/holland-test/', views.holland_test, name='holland_test'),
     path('students/<int:pk>/holland-questionnaire/', views.holland_questionnaire, name='holland_questionnaire'),
     path('students/<int:pk>/submit-holland-questionnaire/', views.submit_holland_questionnaire, name='submit_holland_questionnaire'),
-    path('students/<int:pk>/gardner-test/', views.gardner_test, name='gardner_test'),
     path('students/<int:pk>/gardner-questionnaire/', views.gardner_questionnaire, name='gardner_questionnaire'),
     path('students/<int:pk>/submit-gardner-questionnaire/', views.submit_gardner_questionnaire, name='submit_gardner_questionnaire'),
 ]
