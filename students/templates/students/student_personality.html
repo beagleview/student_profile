@@ -58,20 +58,21 @@
         <!-- Holland Test Results -->
         {% if holland_test %}
             <div class="bg-white rounded-lg shadow-lg mb-6">
-                <div class="bg-blue-600 text-white rounded-t-lg px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div class="bg-blue-600 text-white rounded-t-lg px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 cursor-pointer" onclick="toggleCollapse('holland-results')">
                     <div>
                         <h5 class="text-lg font-semibold mb-1">
                             <i class="fas fa-briefcase mr-2"></i>แบบทดสอบความสนใจอาชีพ Dr. John L Holland
+                            <i class="fas fa-chevron-down ml-2 transition-transform duration-200" id="holland-chevron"></i>
                         </h5>
                         <small class="text-blue-100">Career Interest Assessment</small>
                     </div>
                     <div>
-                        <a href="{% url 'holland_questionnaire' student.pk %}" class="bg-white text-blue-600 hover:bg-blue-50 px-3 py-1 rounded text-sm font-medium transition-colors inline-flex items-center">
+                        <a href="{% url 'holland_questionnaire' student.pk %}" class="bg-white text-blue-600 hover:bg-blue-50 px-3 py-1 rounded text-sm font-medium transition-colors inline-flex items-center" onclick="event.stopPropagation()">
                             <i class="fas fa-edit mr-1"></i> แก้ไข
                         </a>
                     </div>
                 </div>
-                <div class="p-6">
+                <div id="holland-results" class="p-6" style="display: none;">
                     <!-- Holland Radar Chart -->
                     <div class="text-center mb-6">
                         <canvas id="hollandChart" width="300" height="300"></canvas>
@@ -166,20 +167,21 @@
         <!-- Gardner Test Results -->
         {% if gardner_test %}
             <div class="bg-white rounded-lg shadow-lg">
-                <div class="bg-green-600 text-white rounded-t-lg px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div class="bg-green-600 text-white rounded-t-lg px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 cursor-pointer" onclick="toggleCollapse('gardner-results')">
                     <div>
                         <h5 class="text-lg font-semibold mb-1">
                             <i class="fas fa-brain mr-2"></i>Samsung Career Discovery Assessment
+                            <i class="fas fa-chevron-down ml-2 transition-transform duration-200" id="gardner-chevron"></i>
                         </h5>
                         <small class="text-green-100">Multiple Intelligence Assessment</small>
                     </div>
                     <div>
-                        <a href="{% url 'ss_career_discovery' student.pk %}" class="bg-white text-green-600 hover:bg-green-50 px-3 py-1 rounded text-sm font-medium transition-colors inline-flex items-center">
+                        <a href="{% url 'ss_career_discovery' student.pk %}" class="bg-white text-green-600 hover:bg-green-50 px-3 py-1 rounded text-sm font-medium transition-colors inline-flex items-center" onclick="event.stopPropagation()">
                             <i class="fas fa-edit mr-1"></i> แก้ไข
                         </a>
                     </div>
                 </div>
-                <div class="p-6">
+                <div id="gardner-results" class="p-6" style="display: none;">
                     <!-- Gardner Radar Chart -->
                     <div class="text-center mb-6">
                         <canvas id="gardnerChart" width="300" height="300"></canvas>
@@ -286,80 +288,66 @@
     </div>
 </div>
 
-<!-- Results Summary -->
-{% if holland_test and gardner_test %}
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header bg-warning text-dark">
-                <h5 class="mb-0">
-                    <i class="fas fa-chart-bar me-2"></i>สรุปผลการประเมิน
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6 class="text-primary">ลำดับ 1</h6>
-                        <div class="alert alert-primary">
-                            <h6>ความสามารถด้านการวิเคราะห์และการคิดอย่างเป็นระบบ</h6>
-                            <div class="progress mb-2">
-                                <div class="progress-bar bg-primary" style="width: 66.67%">66.67%</div>
-                            </div>
-                            <small class="text-muted">ตามแนวทฤษฎี Dr. Holland และ Dr. Gardner</small>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <h6 class="text-success">ลำดับ 2</h6>
-                        <div class="alert alert-success">
-                            <h6>ซองนข้าไสคม มปัญญู่พ์รักษันกับบุคลภม</h6>
-                            <div class="progress mb-2">
-                                <div class="progress-bar bg-success" style="width: 61.11%">61.11%</div>
-                            </div>
-                            <small class="text-muted">ความสามารถทางด้านการสื่อสารและเข้าใจผู้อื่น</small>
-                        </div>
+        <!-- Results Summary -->
+        {% if holland_test and gardner_test %}
+            <div class="bg-white rounded-lg shadow-lg mt-6">
+                <div class="bg-yellow-600 text-white rounded-t-lg px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 cursor-pointer" onclick="toggleCollapse('summary-results')">
+                    <div>
+                        <h5 class="text-lg font-semibold mb-1">
+                            <i class="fas fa-chart-bar mr-2"></i>สรุปผลการประเมิน
+                            <i class="fas fa-chevron-down ml-2 transition-transform duration-200" id="summary-chevron"></i>
+                        </h5>
+                        <small class="text-yellow-100">Combined Assessment Summary</small>
                     </div>
                 </div>
-                
-                <!-- Additional Insights -->
-                <div class="row mt-3">
-                    <div class="col-12">
-                        <h6>การแนะแนวเพิ่มเติม:</h6>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="card border-primary">
-                                    <div class="card-body text-center">
-                                        <h6 class="text-primary">สำดับ 3</h6>
-                                        <p class="small">ซองดิกมธ์วูำร่วมดิงแล่กเปีปม</p>
-                                        <div class="badge bg-secondary">47.06%</div>
-                                    </div>
+                <div id="summary-results" class="p-6" style="display: none;">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h6 class="text-blue-600 font-semibold mb-2">ลำดับ 1</h6>
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                <h6 class="font-semibold text-blue-800 mb-2">ความสามารถด้านการวิเคราะห์และการคิดอย่างเป็นระบบ</h6>
+                                <div class="w-full bg-blue-200 rounded-full h-3 mb-2">
+                                    <div class="bg-blue-600 h-3 rounded-full flex items-center justify-center text-white text-xs font-medium" style="width: 66.67%">66.67%</div>
                                 </div>
+                                <small class="text-blue-600">ตามแนวทฤษฎี Dr. Holland และ Dr. Gardner</small>
                             </div>
-                            <div class="col-md-4">
-                                <div class="card border-info">
-                                    <div class="card-body text-center">
-                                        <h6 class="text-info">สำดับ 4</h6>
-                                        <p class="small">ซองคามรวงรี่สำพแทเมิ่นปูปธรรม</p>
-                                        <div class="badge bg-secondary">41.67%</div>
-                                    </div>
+                        </div>
+                        <div>
+                            <h6 class="text-green-600 font-semibold mb-2">ลำดับ 2</h6>
+                            <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                                <h6 class="font-semibold text-green-800 mb-2">ความสามารถทางด้านการสื่อสารและเข้าใจผู้อื่น</h6>
+                                <div class="w-full bg-green-200 rounded-full h-3 mb-2">
+                                    <div class="bg-green-600 h-3 rounded-full flex items-center justify-center text-white text-xs font-medium" style="width: 61.11%">61.11%</div>
                                 </div>
+                                <small class="text-green-600">ความสามารถทางด้านการสื่อสารและเข้าใจผู้อื่น</small>
                             </div>
-                            <div class="col-md-4">
-                                <div class="card border-warning">
-                                    <div class="card-body text-center">
-                                        <h6 class="text-warning">สำดับ 5</h6>
-                                        <p class="small">ซองดตีปะควรทสุขกะคะมา</p>
-                                        <div class="badge bg-secondary">35.71%</div>
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Additional Insights -->
+                    <div>
+                        <h6 class="text-gray-800 font-semibold mb-4">การแนะแนวเพิ่มเติม:</h6>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-white border-2 border-blue-200 rounded-lg p-4 text-center">
+                                <h6 class="text-blue-600 font-semibold mb-1">ลำดับ 3</h6>
+                                <p class="text-sm text-gray-600 mb-2">ความสามารถด้านการสร้างสรรค์</p>
+                                <div class="inline-block bg-gray-500 text-white px-2 py-1 rounded text-sm font-medium">47.06%</div>
+                            </div>
+                            <div class="bg-white border-2 border-cyan-200 rounded-lg p-4 text-center">
+                                <h6 class="text-cyan-600 font-semibold mb-1">ลำดับ 4</h6>
+                                <p class="text-sm text-gray-600 mb-2">ความสามารถด้านการทำงานเป็นทีม</p>
+                                <div class="inline-block bg-gray-500 text-white px-2 py-1 rounded text-sm font-medium">41.67%</div>
+                            </div>
+                            <div class="bg-white border-2 border-yellow-200 rounded-lg p-4 text-center">
+                                <h6 class="text-yellow-600 font-semibold mb-1">ลำดับ 5</h6>
+                                <p class="text-sm text-gray-600 mb-2">ความสามารถด้านศิลปะและดนตรี</p>
+                                <div class="inline-block bg-gray-500 text-white px-2 py-1 rounded text-sm font-medium">35.71%</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-{% endif %}
+        {% endif %}
 
 <!-- Back to Student Details -->
 <div class="mt-6">
@@ -507,5 +495,19 @@ new Chart(gardnerCtx, {
     }
 });
 {% endif %}
+
+// Toggle function for collapsible sections
+function toggleCollapse(sectionId) {
+    const content = document.getElementById(sectionId);
+    const chevron = document.getElementById(sectionId.replace('-results', '-chevron'));
+    
+    if (content.style.display === 'none') {
+        content.style.display = 'block';
+        chevron.style.transform = 'rotate(180deg)';
+    } else {
+        content.style.display = 'none';
+        chevron.style.transform = 'rotate(0deg)';
+    }
+}
 </script>
 {% endblock %}

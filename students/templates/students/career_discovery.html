@@ -79,7 +79,7 @@
                 </div>
 
                 <!-- Questionnaire Form -->
-                <form id="questionnaireForm" method="post" action="{% url 'submit_gardner_questionnaire' student.pk %}">
+                <form id="questionnaireForm" method="post" action="{% url 'submit_ss_career_discovery' student.pk %}">
                     {% csrf_token %}
                     
                     <!-- Questions -->
